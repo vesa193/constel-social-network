@@ -4,7 +4,8 @@ import { Avatar, Box, Button, Typography } from '@mui/material';
 import { useForm } from '@/hooks/useForm';
 import constelLogo from '@assets/img/constel_logo.svg';
 import { useLoginUser } from './hooks/useLoginUser';
-import { FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
+import { validateInfo } from '@/hooks/validateInfo';
 
 const initialState = {
     email: '',
@@ -12,11 +13,18 @@ const initialState = {
 };
 
 const LoginScreen = () => {
-    const { fields, onChange, onReset } = useForm(initialState);
+    const { fields, onChange, onReset, setErrors, errors } =
+        useForm(initialState);
     const { data: loginData, isSuccess, mutate } = useLoginUser();
 
     const handleOnSubmit = (e: FormEvent) => {
         e.preventDefault();
+        console.log('validateInfo(fields)', validateInfo(fields));
+        if (Object.keys(validateInfo(fields))?.length) {
+            setErrors(validateInfo(fields));
+            return;
+        }
+
         const formData = {
             email: fields?.email,
             password: fields?.password,
@@ -25,7 +33,13 @@ const LoginScreen = () => {
         mutate(formData);
         isSuccess && onReset();
     };
-    console.log('loginData', loginData);
+
+    const isSubmitButtonDisabled =
+        !fields?.email ||
+        !fields?.password ||
+        !!errors.email ||
+        !!errors.password;
+
     return (
         <div className={styles.login}>
             <Avatar
@@ -47,10 +61,8 @@ const LoginScreen = () => {
                     value={fields.email}
                     onChange={onChange}
                     helperText={
-                        loginData?.error && (
-                            <Typography color="red">
-                                {loginData?.error?.message}
-                            </Typography>
+                        errors?.email && (
+                            <Typography color="red">{errors?.email}</Typography>
                         )
                     }
                 />
@@ -62,9 +74,9 @@ const LoginScreen = () => {
                     value={fields.password}
                     onChange={onChange}
                     helperText={
-                        loginData?.error && (
+                        errors?.password && (
                             <Typography color="red">
-                                {loginData?.error?.message}
+                                {errors?.password}
                             </Typography>
                         )
                     }
@@ -87,7 +99,11 @@ const LoginScreen = () => {
                     </Box>
                 )}
 
-                <Button type="submit" variant="contained">
+                <Button
+                    type="submit"
+                    variant="contained"
+                    disabled={isSubmitButtonDisabled}
+                >
                     Confirm
                 </Button>
             </Box>
