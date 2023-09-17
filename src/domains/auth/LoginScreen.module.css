@@ -1,0 +1,14 @@
+.login {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+}
+
+.login-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    width: clamp(260px, 50%, 300px);
+    gap: 1.5rem;
+}

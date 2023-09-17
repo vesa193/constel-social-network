@@ -1,4 +1,5 @@
 export const routePaths = {
-  ROOT: '/',
-  LOGIN: '/login',
+    ROOT: '/',
+    LOGIN: '/login',
+    HOME: '/home',
 };
