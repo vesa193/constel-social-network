@@ -4,7 +4,7 @@ import {
     createBrowserRouter,
     createRoutesFromElements,
 } from 'react-router-dom';
-import Home from '@/domains/HomePage';
+import HomeScreen from '@/domains/home/HomeScreen';
 import LoginScreen from '@/domains/auth/LoginScreen';
 import { routePaths } from './routePaths';
 import PrivateRoutes from './PrivateRoutes';
@@ -18,7 +18,7 @@ export const router = () => {
                     element={<Navigate to={routePaths.HOME} />}
                 />
                 <Route element={<PrivateRoutes />}>
-                    <Route path={routePaths.HOME} element={<Home />} />
+                    <Route path={routePaths.HOME} element={<HomeScreen />} />
                 </Route>
                 <Route path={routePaths.LOGIN} element={<LoginScreen />} />
             </>

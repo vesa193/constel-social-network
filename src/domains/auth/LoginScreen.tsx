@@ -38,8 +38,6 @@ const LoginScreen = () => {
         } catch (error) {}
     };
 
-    console.log('loginData', loginData);
-
     const isSubmitButtonDisabled =
         !fields?.email ||
         !fields?.password ||

@@ -4,8 +4,9 @@ import { Navigate, Outlet } from 'react-router-dom';
 
 const PrivateRoutes = () => {
     const { token } = useContext(AuthContext);
+    const JWTToken = token || localStorage.getItem('token');
 
-    return !!token ? <Outlet /> : <Navigate to="/login" replace />;
+    return !!JWTToken ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 export default PrivateRoutes;

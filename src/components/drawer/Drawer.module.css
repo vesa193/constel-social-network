@@ -1,0 +1,9 @@
+.link {
+    color: #157eff;
+    text-decoration: none;
+    text-transform: capitalize;
+    font-family: 'Roboto-Bold';
+    font-size: 19px;
+    display: flex;
+    gap: 20px;
+}

@@ -13,6 +13,7 @@ const useLoginUser = () => {
         onSuccess: async (data) => {
             if (data?.token) {
                 setToken(data.token);
+                localStorage.setItem('token', data.token);
                 navigate(routePaths.HOME, {
                     replace: true,
                     state: { from: routePaths.LOGIN, token: data.token },
