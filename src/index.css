@@ -25,52 +25,50 @@
     -webkit-text-size-adjust: 100%;
 }
 
+/* Global CSS variables */
+:root {
+    --thumb-color-primary: #222124;
+    --thumb-color-secondary: #005bca;
+    --track-color: #ececec;
+    --border-radius: 10px;
+}
+
 body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    scrollbar-width: thin;
+    scroll-behavior: smooth;
 }
 
-/* a {
-    font-weight: 500;
-    color: #646cff;
-    text-decoration: inherit;
-}
-a:hover {
-    color: #535bf2;
+/* Scrollbar css settings */
+body::-webkit-scrollbar {
+    width: 5px;
 }
 
-body {
-    margin: 0;
-    display: flex;
-    place-items: center;
-    min-width: 320px;
-    min-height: 100vh;
+body::-webkit-scrollbar-track {
+    background: var(--track-color);
+    border-radius: var(--border-radius);
 }
 
-h1 {
-    font-size: 3.2em;
-    line-height: 1.1;
+body::-webkit-scrollbar-thumb {
+    background-color: var(--thumb-color-primary);
+    border-radius: var(--border-radius);
 }
 
-button {
-    border-radius: 8px;
-    border: 1px solid transparent;
-    padding: 0.6em 1.2em;
-    font-size: 1em;
-    font-weight: 500;
-    font-family: inherit;
-    background-color: #1a1a1a;
-    cursor: pointer;
-    transition: border-color 0.25s;
+body *::-webkit-scrollbar {
+    width: 5px;
 }
-button:hover {
-    border-color: #646cff;
+
+body *::-webkit-scrollbar-track {
+    background: var(--track-color);
+    border-radius: var(--border-radius);
 }
-button:focus,
-button:focus-visible {
-    outline: 4px auto -webkit-focus-ring-color;
-} */
+
+body *::-webkit-scrollbar-thumb {
+    background-color: var(--thumb-color-secondary);
+    border-radius: var(--border-radius);
+}
 
 @media (prefers-color-scheme: light) {
     :root {

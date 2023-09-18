@@ -2,9 +2,13 @@ import { BaseColors, baseBackground } from '@/themes/colors';
 import { faMicrophone } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Avatar, Box, TextField } from '@mui/material';
-import BaseButton from '../button/BaseButton';
+import BaseButton from '@components/button/BaseButton';
 
-const PostCardCreation = () => {
+type IPostCardCreation = {
+    onRecord: () => void;
+};
+
+const PostCardCreation = ({ onRecord }: IPostCardCreation) => {
     return (
         <Box
             display="flex"
@@ -41,6 +45,7 @@ const PostCardCreation = () => {
                         icon={faMicrophone}
                         color={BaseColors.BLUE}
                         fontSize={24}
+                        onClick={onRecord}
                     />
                     <BaseButton color="tertiary">New Post</BaseButton>
                 </Box>

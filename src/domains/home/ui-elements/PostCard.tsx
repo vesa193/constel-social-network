@@ -5,8 +5,35 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Avatar, Box, Button, Typography } from '@mui/material';
 import testImg from '@assets/img/test-photo.jpeg';
 import styles from './PostCard.module.css';
+import { formatDate } from '@/utils/utils';
 
-const PostCard = () => {
+export type IUser = {
+    full_name: string;
+    picture: string;
+    username: string;
+};
+
+export type IPostCard = {
+    audio: null | string;
+    comments: number;
+    created_at: string;
+    image: string;
+    liked: boolean;
+    likes: number;
+    post_id: string;
+    text: string;
+    user: IUser;
+    user_id: string;
+};
+
+const PostCard = ({
+    user: { full_name: fullName, username, picture },
+    image,
+    text,
+    created_at: createdAt,
+    comments,
+    likes,
+}: IPostCard) => {
     return (
         <Box
             display="flex"
@@ -30,13 +57,14 @@ const PostCard = () => {
                                     fill: 'transparent',
                                 },
                             }}
+                            srcSet={picture ? picture : ''}
                         />
                         <Box display="flex" flexDirection="column">
                             <Typography variant="p3" color="secondary">
-                                @levraimcfly
+                                {username ? `@${username}` : ''}
                             </Typography>
                             <Typography variant="h3Bold">
-                                Jorge Mckinney
+                                {fullName ? fullName : ''}
                             </Typography>
                         </Box>
                     </Box>
@@ -45,25 +73,24 @@ const PostCard = () => {
                             icon={faCalendar}
                             color={BaseColors.GREY3}
                         />
-                        <Typography variant="p2" color="secondary">
-                            12.08.2023.
+                        <Typography variant="p3" color="secondary">
+                            {formatDate(createdAt)}
                         </Typography>
                     </Box>
                 </Box>
             </Box>
-            <img
-                className={styles.postCardImage}
-                src={testImg}
-                alt="test image"
-            />
-            <Box>
-                <Typography variant="p2">
-                    Pizza ipsum dolor meat lovers buffalo. Pepperoni sausage
-                    banana bell ranch and white. Tossed bbq platter sauce
-                    platter. Broccoli Hawaiian pineapple style Aussie
-                    mozzarella. Pepperoni tomato thin.
-                </Typography>
-            </Box>
+            {image ? (
+                <img
+                    className={styles.postCardImage}
+                    src={image}
+                    alt={username}
+                />
+            ) : null}
+            {text ? (
+                <Box>
+                    <Typography variant="p2">{text ? text : ''}</Typography>
+                </Box>
+            ) : null}
             <Box display="flex" sx={{ gap: '20px' }}>
                 <Button
                     variant="contained"
@@ -76,7 +103,7 @@ const PostCard = () => {
                         icon={faHeart}
                     />
                     <Typography variant="p2" color="secondary">
-                        120
+                        {likes}
                     </Typography>
                 </Button>
                 <Button
@@ -90,7 +117,7 @@ const PostCard = () => {
                         icon={faComment}
                     />
                     <Typography variant="p2" color="secondary">
-                        20
+                        {comments}
                     </Typography>
                 </Button>
             </Box>
