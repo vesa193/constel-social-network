@@ -1,9 +1,26 @@
 import { loginUser } from '@/api/api';
+import { AuthContext } from '@/context/AuthtContext';
+import { routePaths } from '@/router/routePaths';
+import { useContext } from 'react';
 import { useMutation } from 'react-query';
+import { useNavigate } from 'react-router-dom';
 
 const useLoginUser = () => {
+    const { setToken } = useContext(AuthContext);
+    const navigate = useNavigate();
+
     const { data, mutate, isSuccess } = useMutation(loginUser, {
-        onSuccess: (data) => data,
+        onSuccess: async (data) => {
+            if (data?.token) {
+                setToken(data.token);
+                navigate(routePaths.HOME, {
+                    replace: true,
+                    state: { from: routePaths.LOGIN, token: data.token },
+                });
+
+                return data;
+            }
+        },
         onError: (error: any) => error.message,
     });
 

@@ -1,11 +1,13 @@
-import Input from '@components/form/Input';
-import styles from './LoginScreen.module.css';
-import { Avatar, Box, Button, Typography } from '@mui/material';
+import BaseButton from '@/components/button/BaseButton';
+import Input from '@/components/form/InputField';
 import { useForm } from '@/hooks/useForm';
-import constelLogo from '@assets/img/constel_logo.svg';
-import { useLoginUser } from './hooks/useLoginUser';
-import { FormEvent, useState } from 'react';
 import { validateInfo } from '@/hooks/validateInfo';
+import constelLogo from '@assets/img/constel_logo.svg';
+import { Avatar, Box, Typography } from '@mui/material';
+import { FormEvent } from 'react';
+
+import styles from './LoginScreen.module.css';
+import { useLoginUser } from './hooks/useLoginUser';
 
 const initialState = {
     email: '',
@@ -15,11 +17,11 @@ const initialState = {
 const LoginScreen = () => {
     const { fields, onChange, onReset, setErrors, errors } =
         useForm(initialState);
-    const { data: loginData, isSuccess, mutate } = useLoginUser();
+    const { data: loginData, mutate } = useLoginUser();
 
     const handleOnSubmit = (e: FormEvent) => {
         e.preventDefault();
-        console.log('validateInfo(fields)', validateInfo(fields));
+
         if (Object.keys(validateInfo(fields))?.length) {
             setErrors(validateInfo(fields));
             return;
@@ -30,9 +32,13 @@ const LoginScreen = () => {
             password: fields?.password,
         };
 
-        mutate(formData);
-        isSuccess && onReset();
+        try {
+            mutate(formData);
+            onReset();
+        } catch (error) {}
     };
+
+    console.log('loginData', loginData);
 
     const isSubmitButtonDisabled =
         !fields?.email ||
@@ -42,18 +48,20 @@ const LoginScreen = () => {
 
     return (
         <div className={styles.login}>
-            <Avatar
-                src={constelLogo}
-                sx={{
-                    width: '78px',
-                    height: '78px',
-                }}
-            />
             <Box
                 component="form"
                 className={styles['login-form']}
                 onSubmit={handleOnSubmit}
             >
+                <Avatar
+                    src={constelLogo}
+                    sx={{
+                        width: '78px',
+                        height: '78px',
+                        display: 'flex',
+                        alignSelf: 'center',
+                    }}
+                />
                 <Input
                     name="email"
                     label="Email"
@@ -99,16 +107,21 @@ const LoginScreen = () => {
                     </Box>
                 )}
 
-                <Button
-                    type="submit"
-                    variant="contained"
-                    disabled={isSubmitButtonDisabled}
-                >
-                    Confirm
-                </Button>
+                <Box display="flex" justifyContent="center">
+                    <BaseButton
+                        type="submit"
+                        color={
+                            isSubmitButtonDisabled ? 'secondary' : 'tertiary'
+                        }
+                        isDisabled={isSubmitButtonDisabled}
+                    >
+                        Confirm
+                    </BaseButton>
+                </Box>
             </Box>
         </div>
     );
 };
 
+LoginScreen.displayName = 'LoginScreen';
 export default LoginScreen;

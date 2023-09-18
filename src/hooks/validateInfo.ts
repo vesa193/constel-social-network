@@ -1,3 +1,5 @@
+import { configApp } from '@/config';
+
 interface IErrors {
     [key: string]: string;
 }
@@ -5,15 +7,13 @@ interface IErrors {
 const validateInfo = (values: any) => {
     const errors: IErrors = {};
 
-    console.log('values', values);
-
     if (!values.email.includes('@')) {
-        errors.email = 'Email is incorrect, `@` character is missing';
+        errors.email = "The email needs to contain the '@' symbol.";
     }
 
-    if (values?.password?.length < 6) {
+    if (values?.password?.length < configApp.MIN_CHARACTERS) {
         errors.password =
-            'Password is incorrect, should contain `6` or more characters';
+            'The password needs to be at least 6 characters long.';
     }
 
     return errors;

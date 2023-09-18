@@ -1,7 +1,8 @@
 import { Box, TextField } from '@mui/material';
 import { ChangeEvent, ReactNode } from 'react';
+import InputLabel from '../text/InputLabel';
 
-type InputProps = {
+type InputFieldProps = {
     name: string;
     label: string;
     placeholder: string;
@@ -10,23 +11,22 @@ type InputProps = {
     helperText?: ReactNode;
 };
 
-const Input = ({
+const InputField = ({
     name,
     label,
     placeholder,
     value,
     onChange,
     helperText,
-}: InputProps) => {
+}: InputFieldProps) => {
     return (
         <Box display="flex" flexDirection="column">
-            <label htmlFor={name}>
-                <strong>{label}</strong>
-            </label>
+            <InputLabel htmlFor={name} label={label} />
             <TextField
                 sx={{
                     '.MuiOutlinedInput-root': {
                         borderRadius: '10px',
+                        fontSize: '14px',
                     },
                 }}
                 name={name}
@@ -38,5 +38,5 @@ const Input = ({
         </Box>
     );
 };
-
-export default Input;
+InputField.displayName = 'InputField';
+export default InputField;
