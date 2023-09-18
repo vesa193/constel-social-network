@@ -15,7 +15,7 @@ type ButtonColor =
 type ButtonType = 'button' | 'submit' | 'reset';
 
 type BaseButtonProps = {
-    type: ButtonType;
+    type?: ButtonType;
     color?: ButtonColor;
     isDisabled?: boolean;
     children: ReactNode;

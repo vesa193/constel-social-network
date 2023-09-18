@@ -1,7 +1,7 @@
 import { BaseColors } from '@/themes/colors';
 import { faHouse } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Avatar, Box } from '@mui/material';
+import { Avatar, Box, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import constelLogo from '@assets/img/constel_logo.svg';
 import styles from './Drawer.module.css';
@@ -31,7 +31,7 @@ const Drawer = () => {
                             icon={faHouse}
                             color={BaseColors.BLUE}
                         />
-                        Home
+                        <Typography variant="h1">Home</Typography>
                     </Link>
                 </Box>
             </Box>

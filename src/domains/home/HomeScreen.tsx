@@ -1,3 +1,5 @@
+import PostCard from '@/components/cards/PostCard';
+import PostCardCreation from '@/components/cards/PostCardCreation';
 import Drawer from '@/components/drawer/Drawer';
 import Navigation from '@/components/navigation/Navigation';
 import { Box } from '@mui/material';
@@ -20,7 +22,8 @@ const HomePage = () => {
                     }}
                     component="main"
                 >
-                    MAIN
+                    <PostCardCreation />
+                    <PostCard />
                 </Box>
             </Box>
             <Box sx={{ flexBasis: '200px' }} component="section"></Box>

@@ -8,6 +8,7 @@ import {
     error,
 } from './colors';
 import { fontTypes } from './fonts';
+import React from 'react';
 
 const { palette } = createTheme();
 const { augmentColor } = palette;
@@ -78,6 +79,11 @@ export const customTheme = createTheme({
             fontSize: '14px',
             fontWeight: 400,
             fontFamily: fontTypes.baseFontFamily,
+        },
+        h3Bold: {
+            fontSize: '14px',
+            fontWeight: 700,
+            fontFamily: fontTypes.fontFamilySecondary,
         },
         p1: {
             fontSize: '19px',
@@ -232,6 +238,7 @@ declare module '@mui/material/styles' {
         h1: React.CSSProperties;
         h2: React.CSSProperties;
         h3: React.CSSProperties;
+        h3Bold: React.CSSProperties;
         p1?: React.CSSProperties;
         p2?: React.CSSProperties;
         p3: React.CSSProperties;
@@ -245,6 +252,7 @@ declare module '@mui/material/styles' {
         h1?: React.CSSProperties;
         h2?: React.CSSProperties;
         h3?: React.CSSProperties;
+        h3Bold?: React.CSSProperties;
         p1?: React.CSSProperties;
         p2?: React.CSSProperties;
         p3: React.CSSProperties;
@@ -260,6 +268,7 @@ declare module '@mui/material/Typography' {
         h1: true;
         h2: true;
         h3: true;
+        h3Bold: true;
         p1: true;
         p2: true;
         p3: true;

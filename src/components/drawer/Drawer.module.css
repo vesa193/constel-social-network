@@ -3,7 +3,12 @@
     text-decoration: none;
     text-transform: capitalize;
     font-family: 'Roboto-Bold';
-    font-size: 19px;
+    font-size: 16px;
     display: flex;
-    gap: 20px;
+    align-items: center;
+    gap: 10px;
+
+    &:hover {
+        color: #157eff;
+    }
 }
