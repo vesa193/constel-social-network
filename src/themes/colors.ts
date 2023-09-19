@@ -5,6 +5,7 @@ export enum BaseColors {
     GREY2 = '#D9D9D9',
     GREY3 = '#A6A6A6',
     GREY4 = '#848484',
+    GREY_LIGHT = '#EFEFEF',
     BLUE = '#157EFF',
     BLUE_ACTIVE = '#005BCA',
     RED = '#FF1515',
@@ -26,6 +27,7 @@ export const baseColors = {
     quatinary: BaseColors.GREY2,
     error: BaseColors.RED,
     success: BaseColors.GREEN,
+    greyLight: BaseColors.GREY_LIGHT,
 };
 
 export const buttonColors = {

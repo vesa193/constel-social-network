@@ -11,7 +11,7 @@ import { AuthProvider } from './context/AuthtContext.tsx';
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
-            refetchOnWindowFocus: true,
+            refetchOnWindowFocus: false,
             retry: false,
         },
     },
