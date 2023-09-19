@@ -1,9 +1,15 @@
-import { RouterProvider } from 'react-router-dom';
 import './App.css';
-import { router } from './router/routerManager';
+import { modals } from './modals';
+import renderModals, { IModal } from './renderModals';
+import { MainRouter } from './router/routerManager';
 
 function App() {
-    return <RouterProvider router={router()} />;
+    return (
+        <>
+            <MainRouter />
+            {renderModals(modals as IModal[])}
+        </>
+    );
 }
 
 export default App;

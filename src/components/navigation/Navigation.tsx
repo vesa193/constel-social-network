@@ -7,6 +7,8 @@ const Navigation = () => {
         <Box
             component="nav"
             sx={{
+                position: 'sticky' || '-webkit-sticky',
+                top: 0,
                 borderInline: `1px solid ${theme.palette.divider}`,
                 borderBottom: `1px solid ${theme.palette.divider}`,
                 padding: '24px 0 10px 20px',

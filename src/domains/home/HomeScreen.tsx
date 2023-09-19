@@ -4,13 +4,16 @@ import { Box, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useRef, useState } from 'react';
 import styles from './HomeScreen.module.css';
-import useGetPosts from './hooks/useGetPosts';
+import usePosts from './hooks/usePosts';
 import PostCard, { IPostCard } from './ui-elements/PostCard';
 import PostCardCreation from './ui-elements/PostCardCreation';
+import PostDetailsModal from '@/domains/home/modals/PostDetailsModal';
+import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
     const theme = useTheme();
-    const { data: postData, isLoading, isFetching } = useGetPosts();
+    const navigate = useNavigate();
+    const { data: postData, isLoading, isFetching } = usePosts();
     const [recording, setRecording] = useState(false);
     const [permission, setPermission] = useState(false);
     const [stream, setStream] = useState<null | any>(null);
@@ -18,6 +21,7 @@ const HomePage = () => {
     const [recordingStatus, setRecordingStatus] = useState('inactive');
     const [audioChunks, setAudioChunks] = useState<any[]>([]);
     const [audio, setAudio] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const mimeType = 'audio/webm';
     console.log('posts', postData);
 
@@ -84,18 +88,22 @@ const HomePage = () => {
     };
 
     return (
-        <Box display="flex" className={styles.home}>
+        <Box className={styles.home}>
             <Drawer />
-            <Box display="flex" flexDirection="column" flex={1}>
+            <Box
+                display="flex"
+                flexDirection="column"
+                sx={{ overflowY: 'auto', overflowX: 'hidden' }}
+            >
                 <Navigation />
                 <Box
+                    component="section"
                     sx={{
                         flex: 1,
                         borderInline: `1px solid ${theme.palette.divider}`,
                         padding: '16px',
                         overflowY: 'auto',
                     }}
-                    component="main"
                 >
                     <PostCardCreation
                         audio={audio}
@@ -106,7 +114,18 @@ const HomePage = () => {
                         onStopRecord={onStopRecord}
                     />
                     {(postData?.posts || [])?.map((post: IPostCard) => {
-                        return <PostCard key={post.post_id} {...post} />;
+                        return (
+                            <PostCard
+                                key={post.post_id}
+                                {...post}
+                                handleOpenModal={(postId: string) => {
+                                    setIsModalOpen(true);
+                                    navigate({
+                                        search: `?modalId=${postId}`,
+                                    });
+                                }}
+                            />
+                        );
                     })}
                 </Box>
             </Box>

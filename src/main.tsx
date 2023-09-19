@@ -7,6 +7,7 @@ import App from './App.tsx';
 import './index.css';
 import { customTheme } from './themes/global.ts';
 import { AuthProvider } from './context/AuthtContext.tsx';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -26,7 +27,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <QueryClientProvider client={queryClient}>
             <ThemeProvider theme={customTheme}>
                 <AuthProvider>
-                    <App />
+                    <Router>
+                        <App />
+                    </Router>
                 </AuthProvider>
             </ThemeProvider>
             <ReactQueryDevtools position="bottom-right" />

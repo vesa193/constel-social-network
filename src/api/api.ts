@@ -23,7 +23,7 @@ const endpoints = {
 };
 
 /*
- *Login
+ *Login - [ POST ]
  */
 
 export const loginUser = (loginData: any) =>
@@ -35,12 +35,31 @@ export const loginUser = (loginData: any) =>
         });
 
 /*
- *Posts - GET
+ *Posts - [ GET ]
  */
 
 export const getPosts = () =>
     axiosInstance()
         .get(endpoints.posts)
+        .then((response) => response.data)
+        .catch((error: any) => {
+            return error?.response?.data;
+        });
+
+export const getPost = (postId: string) =>
+    axiosInstance()
+        .get(`${endpoints.posts}/${postId}`)
+        .then((response) => response.data)
+        .catch((error: any) => {
+            return error?.response?.data;
+        });
+
+/*
+ *Comments - [ GET ]
+ */
+export const getComments = (postId: string) =>
+    axiosInstance()
+        .get(`${endpoints.posts}/${postId}/comments`)
         .then((response) => response.data)
         .catch((error: any) => {
             return error?.response?.data;

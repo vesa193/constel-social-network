@@ -2,7 +2,7 @@ import { getPosts } from '@/api/api';
 import { useQuery } from 'react-query';
 import CacheKeyTypes from './cacheKeyTypes';
 
-const useGetPosts = () => {
+const usePosts = () => {
     const { data, isError, isLoading, isFetching } = useQuery(
         CacheKeyTypes.Posts,
         getPosts
@@ -11,4 +11,4 @@ const useGetPosts = () => {
     return { data, isError, isFetching, isLoading };
 };
 
-export default useGetPosts;
+export default usePosts;

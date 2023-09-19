@@ -24,6 +24,7 @@ export type IPostCard = {
     text: string;
     user: IUser;
     user_id: string;
+    handleOpenModal?: (postId: string) => void;
 };
 
 const PostCard = ({
@@ -33,6 +34,8 @@ const PostCard = ({
     created_at: createdAt,
     comments,
     likes,
+    post_id: postId,
+    handleOpenModal,
 }: IPostCard) => {
     return (
         <Box
@@ -110,6 +113,7 @@ const PostCard = ({
                     variant="contained"
                     color="quatinary"
                     sx={{ width: 90, display: 'flex', gap: 3 }}
+                    onClick={() => handleOpenModal && handleOpenModal(postId!)}
                 >
                     <FontAwesomeIcon
                         fontSize={19}
