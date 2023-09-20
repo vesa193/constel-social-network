@@ -1,6 +1,6 @@
 # Constel Social Network
 
-## Minimun requires
+## Minimum requires
 
 Node version of 18 is minim required for using the app. 
 
