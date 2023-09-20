@@ -7,7 +7,7 @@ type SpinnerProps = {
 const Spinner = ({ isLoading }: SpinnerProps) => {
     return (
         <Backdrop
-            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.modal + 1 }}
             open={isLoading}
         >
             <CircularProgress color="inherit" />

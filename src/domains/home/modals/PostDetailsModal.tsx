@@ -28,6 +28,7 @@ import useLikeCreation from '../hooks/useLikeCreation';
 import { useForm } from '@/hooks/useForm';
 import useCommentCreation from '../hooks/useCommentCreation';
 import useCommentDeletion from '../hooks/useCommentDeletion';
+import Spinner from '@/components/spinner/Spinner';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiPaper-root': {
@@ -84,24 +85,23 @@ const PostDetailsModal = () => {
         removeLikeByPost(postId);
     };
 
-    if (
-        isPostFetching ||
-        isPostLoading ||
-        isCommentsFetching ||
-        isCommentsLoading
-    ) {
-        return null;
-    }
+    // if (!postData || !commentsList) {
+    //     return null;
+    // }
 
-    if (!postData || !commentsList) {
-        return null;
-    }
-
-    const { post } = postData;
-    const { comments } = commentsList;
+    const post = postData?.post;
+    const comments = commentsList?.comments;
 
     return (
         <div>
+            <Spinner
+                isLoading={
+                    isPostFetching ||
+                    isCommentsFetching ||
+                    isPostLoading ||
+                    isCommentsLoading
+                }
+            />
             <BootstrapDialog
                 onClose={handleClose}
                 aria-labelledby="customized-dialog-title"
@@ -222,7 +222,7 @@ const PostDetailsModal = () => {
                     <PostFooterActions
                         liked={post?.liked}
                         likes={post?.likes}
-                        comments={comments.length}
+                        comments={comments?.length ? comments.length : 0}
                         handlePostLike={() => handlePostLike(post?.post_id)}
                         handleDeleteLike={() => handleDeleteLike(post?.post_id)}
                     />
