@@ -93,8 +93,6 @@ const PostDetailsModal = () => {
         return null;
     }
 
-    console.log('postData', postData);
-
     if (!postData || !commentsList) {
         return null;
     }

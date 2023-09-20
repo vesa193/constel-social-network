@@ -41,14 +41,13 @@ const HomePage = () => {
     const [audio, setAudio] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const mimeType = 'audio/webm';
-    console.log('meData', meData);
 
     const getMicrophonePermission = async () => {
         const microphone = document.querySelector(
             'div[data-clickable="audio-record"]'
         )!;
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            console.log('getUserMedia supported.');
+            // console.log('getUserMedia supported.');
             try {
                 // Success callback
                 const streamData = await navigator.mediaDevices.getUserMedia(
@@ -66,7 +65,7 @@ const HomePage = () => {
                 );
             }
         } else {
-            console.log('getUserMedia not supported on your browser!');
+            // console.log('getUserMedia not supported on your browser!');
         }
     };
 

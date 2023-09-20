@@ -40,14 +40,14 @@ const PostCardCreation = ({
         setIsPlayAudio(true);
 
         audio.onloadedmetadata = function () {
-            console.log('INF^^^', audio.duration);
+            // console.log('INF^^^', audio.duration);
         };
 
-        console.log('INFOo2122', currentTime.current, audio.duration);
+        // console.log('INFOo2122', currentTime.current, audio.duration);
 
         intervalId = setInterval(() => {
             currentTime.current = audio.currentTime;
-            console.log('CURRENT time', audio.currentTime);
+            // console.log('CURRENT time', audio.currentTime);
         }, 1000);
 
         if (currentTime.current === audio.duration) {
