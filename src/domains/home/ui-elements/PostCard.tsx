@@ -1,12 +1,12 @@
-import { BaseColors, baseBackground, baseColors } from '@/themes/colors';
-import { faCalendar, faComment } from '@fortawesome/free-regular-svg-icons';
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Avatar, Box, Button, Typography } from '@mui/material';
-import testImg from '@assets/img/test-photo.jpeg';
-import styles from './PostCard.module.css';
+import AudioRecorder from '@/components/audio/AudioRecorder';
+import { BaseColors, baseBackground } from '@/themes/colors';
 import { formatDate } from '@/utils/utils';
+import { faCalendar } from '@fortawesome/free-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Avatar, Box, Typography } from '@mui/material';
+import styles from './PostCard.module.css';
 import PostFooterActions from './PostFooterActions';
+import useAudio from '@/hooks/useAudio';
 
 export type IUser = {
     full_name: string;
@@ -39,10 +39,14 @@ const PostCard = ({
     likes,
     post_id: postId,
     liked,
+    audio,
     handleOpenModal,
     handlePostLike,
     handleDeleteLike,
 }: IPostCard) => {
+    const { handlePlayAudio, currentTime, duration, isPlayAudio } = useAudio(
+        audio || ''
+    );
     return (
         <Box
             display="flex"
@@ -99,6 +103,15 @@ const PostCard = ({
                 <Box>
                     <Typography variant="p2">{text ? text : ''}</Typography>
                 </Box>
+            ) : null}
+
+            {audio ? (
+                <AudioRecorder
+                    handlePlayAudio={handlePlayAudio}
+                    currentTime={currentTime}
+                    duration={duration}
+                    isPlayAudio={isPlayAudio}
+                />
             ) : null}
             <PostFooterActions
                 liked={liked}

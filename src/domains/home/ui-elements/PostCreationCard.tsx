@@ -1,10 +1,17 @@
 import AudioRecorder from '@/components/audio/AudioRecorder';
+import { configApp } from '@/config';
+import useAudio from '@/hooks/useAudio';
 import { BaseColors, baseBackground, baseColors } from '@/themes/colors';
 import BaseButton from '@components/button/BaseButton';
+import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { faMicrophone, faStop } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Avatar, Box, TextField } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { Avatar, Box, TextField, Typography } from '@mui/material';
+import { useState } from 'react';
+
+type Fields = {
+    text: '';
+};
 
 type IPostCardCreation = {
     permission: boolean;
@@ -12,9 +19,13 @@ type IPostCardCreation = {
     getMicrophonePermission: () => void;
     onStartRecord: () => void;
     onStopRecord: () => void;
+    handleCreatePost: () => void;
+    handleDeleteAudioRecorder: () => void;
     audio?: string | any;
     pictureSrc: string;
     audioPlayerRef: any;
+    fields: Fields;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 const PostCardCreation = ({
@@ -24,55 +35,15 @@ const PostCardCreation = ({
     getMicrophonePermission,
     permission,
     audio: audioSrc,
+    handleCreatePost,
+    handleDeleteAudioRecorder,
+    fields,
+    onChange,
 }: IPostCardCreation) => {
+    const { isPlayAudio, duration, currentTime, handlePlayAudio } = useAudio(
+        audioSrc || ''
+    );
     const [isStartRecording, setIsStartRecording] = useState<boolean>(false);
-    const [isPlayAudio, setIsPlayAudio] = useState<boolean>(false);
-    const [duration, setDuration] = useState(0);
-    const [currentTime, setCurrentTime] = useState(0);
-    const audio = new Audio(audioSrc);
-    let interval: any;
-
-    useEffect(() => {
-        if (isPlayAudio) {
-            audio.play();
-            audio.addEventListener('durationchange', (_e: Event) => {
-                if (audio?.duration !== Infinity) {
-                    const seconds = Math.round(audio.duration);
-                    setDuration(seconds);
-                }
-            });
-            return;
-        }
-
-        audio.pause();
-    }, [isPlayAudio]);
-
-    useEffect(() => {
-        startTime();
-        return () => clearInterval(interval);
-    }, [isPlayAudio, setCurrentTime]);
-
-    const startTime = () => {
-        interval = setInterval(() => {
-            if (audio?.ended) {
-                setIsPlayAudio(false);
-            }
-
-            if (isPlayAudio) {
-                const currentTimeSeconds = Math.round(audio?.currentTime);
-                setCurrentTime(currentTimeSeconds);
-            }
-        }, 1000);
-    };
-
-    const handlePlayAudio = (isPlaying: boolean) => {
-        if (isPlaying) {
-            setIsPlayAudio(isPlaying);
-            return;
-        }
-
-        setIsPlayAudio(isPlaying);
-    };
 
     return (
         <Box
@@ -100,7 +71,21 @@ const PostCardCreation = ({
                 flexDirection="column"
                 sx={{ gap: '20px' }}
             >
-                <TextField variant="standard" placeholder="What's happening" />
+                <TextField
+                    name="text"
+                    variant="standard"
+                    placeholder="What's happening"
+                    value={fields?.text}
+                    autoComplete="off"
+                    onChange={onChange}
+                />
+
+                {fields?.text?.length > 0 ? (
+                    <Typography variant="p3" color="secondary">
+                        {fields?.text?.length}/{configApp.MAX_POST_CHARACTERS}
+                    </Typography>
+                ) : null}
+
                 {permission && !audioSrc && (
                     <Box
                         sx={{
@@ -181,7 +166,25 @@ const PostCardCreation = ({
                             />
                         </Box>
                     )}
-                    <BaseButton color="tertiary">New Post</BaseButton>
+                    <Box
+                        display="flex"
+                        alignItems="center"
+                        sx={{ gap: '20px', cursor: 'pointer' }}
+                    >
+                        <FontAwesomeIcon
+                            icon={faTrashCan}
+                            fontSize={24}
+                            color={BaseColors.RED}
+                            onClick={handleDeleteAudioRecorder}
+                        />
+                        <BaseButton
+                            color="tertiary"
+                            isDisabled={!(audioSrc || fields?.text)}
+                            onClick={handleCreatePost}
+                        >
+                            New Post
+                        </BaseButton>
+                    </Box>
                 </Box>
             </Box>
         </Box>

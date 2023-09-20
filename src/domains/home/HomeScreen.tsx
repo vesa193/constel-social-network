@@ -10,8 +10,11 @@ import useLikeCreation from './hooks/useLikeCreation';
 import useLikeDeletion from './hooks/useLikeDeletion';
 import usePosts from './hooks/usePosts';
 import PostCard, { IPostCard } from './ui-elements/PostCard';
-import PostCardCreation from './ui-elements/PostCardCreation';
+import PostCreationCard from './ui-elements/PostCreationCard';
 import useMyAccount from './hooks/useMyAccount';
+import usePostCreation from './hooks/usePostCreation';
+import { useForm } from '@/hooks/useForm';
+import { SettingsPowerRounded } from '@mui/icons-material';
 
 const HomePage = () => {
     const theme = useTheme();
@@ -21,17 +24,13 @@ const HomePage = () => {
         isLoading: isPostDataLoading,
         isFetching: isPostDataFetching,
     } = usePosts();
-    const {
-        mutate: addLikeToPost,
-        isIdle: isLikeCreationIdle,
-        isLoading: isAddLikeCreationLoading,
-    } = useLikeCreation();
-    const {
-        mutate: removeLikeByPost,
-        isIdle: isLikeDelitionIdle,
-        isLoading: isLikeDelitionLoading,
-    } = useLikeDeletion();
+    const { mutate: addLikeToPost, isLoading: isAddLikeCreationLoading } =
+        useLikeCreation();
+    const { mutate: removeLikeByPost, isLoading: isLikeDelitionLoading } =
+        useLikeDeletion();
     const { data: meData } = useMyAccount();
+    const { mutate: createPost } = usePostCreation();
+    const { fields, onChange, onReset } = useForm({ text: '' });
     const [recording, setRecording] = useState(false);
     const [permission, setPermission] = useState(false);
     const [stream, setStream] = useState<null | any>(null);
@@ -41,6 +40,8 @@ const HomePage = () => {
     const [audio, setAudio] = useState(null);
     const mimeType = 'audio/webm';
     const audioPlayerRef = useRef();
+
+    const formProp = { fields, onChange };
 
     const getMicrophonePermission = async () => {
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -103,8 +104,18 @@ const HomePage = () => {
         removeLikeByPost(postId);
     };
 
+    const handleDeleteAudioRecorder = () => {
+        setAudio(null);
+        setPermission(false);
+    };
+
     const handleCreatePost = () => {
-        // TODO: handle create post
+        const formData = new FormData();
+        audio && formData.append('audio', audio);
+        fields?.text && formData.append('text', fields?.text);
+        // console.log('INFF', fields.text, audio);
+        createPost(formData);
+        onReset();
     };
 
     return (
@@ -134,7 +145,7 @@ const HomePage = () => {
                         overflowY: 'auto',
                     }}
                 >
-                    <PostCardCreation
+                    <PostCreationCard
                         audioPlayerRef={audioPlayerRef}
                         pictureSrc={meData?.account?.picture}
                         audio={audio}
@@ -143,6 +154,9 @@ const HomePage = () => {
                         getMicrophonePermission={getMicrophonePermission}
                         onStartRecord={onStartRecord}
                         onStopRecord={onStopRecord}
+                        handleCreatePost={handleCreatePost}
+                        handleDeleteAudioRecorder={handleDeleteAudioRecorder}
+                        {...formProp}
                     />
                     {(postData?.posts || [])?.map((post: IPostCard) => {
                         return (

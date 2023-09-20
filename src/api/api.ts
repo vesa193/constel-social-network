@@ -56,6 +56,24 @@ export const getPost = (postId: string) =>
         });
 
 /*
+ *Posts - [ POST ]
+ */
+
+type MyFormFields = 'audio' | 'text';
+
+interface CreatePostData extends FormData {
+    append(name: MyFormFields, value: string | Blob, fileName?: string): void;
+}
+
+export const createPost = (formData: CreatePostData) =>
+    axiosInstance(true)
+        .post(`${endpoints.posts}`, formData)
+        .then((response) => response.data)
+        .catch((error: any) => {
+            return error?.response?.data;
+        });
+
+/*
  *Comments - [ GET ]
  */
 export const getComments = (postId: string) =>

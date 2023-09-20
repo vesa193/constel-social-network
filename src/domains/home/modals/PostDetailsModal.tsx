@@ -103,6 +103,7 @@ const PostDetailsModal = () => {
                 }
             />
             <BootstrapDialog
+                // className={styles.postDetailsModal}
                 onClose={handleClose}
                 aria-labelledby="customized-dialog-title"
                 open={!!modalId}
