@@ -28,7 +28,7 @@ type IPostCardCreation = {
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const PostCardCreation = ({
+const PostCreationCard = ({
     pictureSrc,
     onStartRecord,
     onStopRecord,
@@ -191,5 +191,5 @@ const PostCardCreation = ({
     );
 };
 
-PostCardCreation.displayName = 'PostCardCreation';
-export default PostCardCreation;
+PostCreationCard.displayName = 'PostCreationCard';
+export default PostCreationCard;
