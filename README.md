@@ -1,27 +1,27 @@
-# React + TypeScript + Vite
+# Constel Social Network
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Minimun requires
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
+Node version of 18 is minim required for using the app. 
 
 ```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
+    engines: {
+        node: >=18,
+    }
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Installation
+
+After the user downloads the repository to their local machine, should run the next command for installation of packages used in the project.
+
+`npm run install`
+
+## Run the Project
+
+Run the following command in a terminal for starting the project.
+
+`npm run dev`
+
+The project will be uploaded on the local server.
+
+Should look the link of the [localhost](http://localhost:4000) in the terminal.
