@@ -17,9 +17,11 @@ type IPostCardCreation = {
     onStartRecord: () => void;
     onStopRecord: () => void;
     audio?: string | any;
+    pictureSrc: string;
 };
 
 const PostCardCreation = ({
+    pictureSrc,
     onStartRecord,
     onStopRecord,
     getMicrophonePermission,
@@ -72,7 +74,7 @@ const PostCardCreation = ({
         >
             <Box sx={{ flexBasis: '40px' }}>
                 <Avatar
-                    src=""
+                    src={pictureSrc ? pictureSrc : ''}
                     sx={{
                         '.MuiAvatar-fallback': {
                             fill: 'transparent',

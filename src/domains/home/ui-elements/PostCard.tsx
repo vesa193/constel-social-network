@@ -1,4 +1,4 @@
-import { BaseColors, baseBackground } from '@/themes/colors';
+import { BaseColors, baseBackground, baseColors } from '@/themes/colors';
 import { faCalendar, faComment } from '@fortawesome/free-regular-svg-icons';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -6,6 +6,7 @@ import { Avatar, Box, Button, Typography } from '@mui/material';
 import testImg from '@assets/img/test-photo.jpeg';
 import styles from './PostCard.module.css';
 import { formatDate } from '@/utils/utils';
+import PostFooterActions from './PostFooterActions';
 
 export type IUser = {
     full_name: string;
@@ -25,6 +26,8 @@ export type IPostCard = {
     user: IUser;
     user_id: string;
     handleOpenModal?: (postId: string) => void;
+    handlePostLike: (postId: string) => void;
+    handleDeleteLike: (postId: string) => void;
 };
 
 const PostCard = ({
@@ -35,7 +38,10 @@ const PostCard = ({
     comments,
     likes,
     post_id: postId,
+    liked,
     handleOpenModal,
+    handlePostLike,
+    handleDeleteLike,
 }: IPostCard) => {
     return (
         <Box
@@ -94,37 +100,16 @@ const PostCard = ({
                     <Typography variant="p2">{text ? text : ''}</Typography>
                 </Box>
             ) : null}
-            <Box display="flex" sx={{ gap: '20px' }}>
-                <Button
-                    variant="contained"
-                    color="quatinary"
-                    sx={{ width: 90, display: 'flex', gap: 3 }}
-                >
-                    <FontAwesomeIcon
-                        fontSize={19}
-                        color={BaseColors.GREY4}
-                        icon={faHeart}
-                    />
-                    <Typography variant="p2" color="secondary">
-                        {likes}
-                    </Typography>
-                </Button>
-                <Button
-                    variant="contained"
-                    color="quatinary"
-                    sx={{ width: 90, display: 'flex', gap: 3 }}
-                    onClick={() => handleOpenModal && handleOpenModal(postId!)}
-                >
-                    <FontAwesomeIcon
-                        fontSize={19}
-                        color={BaseColors.GREY4}
-                        icon={faComment}
-                    />
-                    <Typography variant="p2" color="secondary">
-                        {comments}
-                    </Typography>
-                </Button>
-            </Box>
+            <PostFooterActions
+                liked={liked}
+                likes={likes}
+                comments={comments}
+                handlePostLike={() => handlePostLike(postId)}
+                handleDeleteLike={() => handleDeleteLike(postId)}
+                handleOpenModal={() =>
+                    handleOpenModal && handleOpenModal(postId)
+                }
+            />
         </Box>
     );
 };

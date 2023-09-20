@@ -42,6 +42,12 @@ export const customTheme = createTheme({
             light: '',
             dark: '',
         },
+        white: {
+            main: baseColors.white,
+            contrastText: baseBackground.white,
+            light: '',
+            dark: '',
+        },
         text: {
             primary: textColors.primary,
             secondary: baseColors.secondary,
@@ -221,6 +227,7 @@ declare module '@mui/material/styles' {
         neutral: Palette['primary'];
         tertiary: Palette['secondary'];
         quatinary?: Palette['secondary'];
+        white?: Palette['quatinary'];
         tertiaryButton?: Palette['secondary'];
         quatinaryButton: Palette['quatinary'];
     }
@@ -230,6 +237,7 @@ declare module '@mui/material/styles' {
         neutral?: PaletteOptions['primary'];
         tertiary?: Palette['tertiary'];
         quatinary?: Palette['quatinary'];
+        white?: Palette['quatinary'];
         tertiaryButton: PaletteColorOptions;
         quatinaryButton: Palette['quatinary'];
     }

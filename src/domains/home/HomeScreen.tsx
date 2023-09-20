@@ -1,19 +1,37 @@
+import Spinner from '@/components/spinner/Spinner';
 import Drawer from '@components/drawer/Drawer';
 import Navigation from '@components/navigation/Navigation';
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './HomeScreen.module.css';
+import useLikeCreation from './hooks/useLikeCreation';
+import useLikeDeletion from './hooks/useLikeDeletion';
 import usePosts from './hooks/usePosts';
 import PostCard, { IPostCard } from './ui-elements/PostCard';
 import PostCardCreation from './ui-elements/PostCardCreation';
-import PostDetailsModal from '@/domains/home/modals/PostDetailsModal';
-import { useNavigate } from 'react-router-dom';
+import useMyAccount from './hooks/useMyAccount';
 
 const HomePage = () => {
     const theme = useTheme();
     const navigate = useNavigate();
-    const { data: postData, isLoading, isFetching } = usePosts();
+    const {
+        data: postData,
+        isLoading: isPostDataLoading,
+        isFetching: isPostDataFetching,
+    } = usePosts();
+    const {
+        mutate: addLikeToPost,
+        isIdle: isLikeCreationIdle,
+        isLoading: isAddLikeCreationLoading,
+    } = useLikeCreation();
+    const {
+        mutate: removeLikeByPost,
+        isIdle: isLikeDelitionIdle,
+        isLoading: isLikeDelitionLoading,
+    } = useLikeDeletion();
+    const { data: meData } = useMyAccount();
     const [recording, setRecording] = useState(false);
     const [permission, setPermission] = useState(false);
     const [stream, setStream] = useState<null | any>(null);
@@ -23,7 +41,7 @@ const HomePage = () => {
     const [audio, setAudio] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const mimeType = 'audio/webm';
-    console.log('posts', postData);
+    console.log('meData', meData);
 
     const getMicrophonePermission = async () => {
         const microphone = document.querySelector(
@@ -66,10 +84,6 @@ const HomePage = () => {
         };
     };
 
-    if (isLoading || isFetching) {
-        return <Typography>Loading...</Typography>;
-    }
-
     const onStartRecord = async () => {
         setRecordingStatus('recording');
         //create new Media recorder instance using the stream
@@ -87,8 +101,24 @@ const HomePage = () => {
         setAudioChunks(localAudioChunks as any[]);
     };
 
+    const handleAddLikeToPost = (postId: string) => {
+        addLikeToPost(postId);
+    };
+
+    const handleRemoveLikeByPost = (postId: string) => {
+        removeLikeByPost(postId);
+    };
+
     return (
         <Box className={styles.home}>
+            <Spinner
+                isLoading={
+                    isPostDataLoading ||
+                    isPostDataFetching ||
+                    isAddLikeCreationLoading ||
+                    isLikeDelitionLoading
+                }
+            />
             <Drawer />
             <Box
                 display="flex"
@@ -106,6 +136,7 @@ const HomePage = () => {
                     }}
                 >
                     <PostCardCreation
+                        pictureSrc={meData?.account?.picture}
                         audio={audio}
                         permission={permission}
                         recording={recording}
@@ -118,6 +149,8 @@ const HomePage = () => {
                             <PostCard
                                 key={post.post_id}
                                 {...post}
+                                handlePostLike={handleAddLikeToPost}
+                                handleDeleteLike={handleRemoveLikeByPost}
                                 handleOpenModal={(postId: string) => {
                                     setIsModalOpen(true);
                                     navigate({

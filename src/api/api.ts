@@ -20,6 +20,7 @@ const axiosInstance = (isMultiform: boolean = false) =>
 const endpoints = {
     login: '/login',
     posts: '/posts',
+    accounts: '/accounts',
 };
 
 /*
@@ -60,6 +61,72 @@ export const getPost = (postId: string) =>
 export const getComments = (postId: string) =>
     axiosInstance()
         .get(`${endpoints.posts}/${postId}/comments`)
+        .then((response) => response.data)
+        .catch((error: any) => {
+            return error?.response?.data;
+        });
+
+/*
+ *Comments - [ POST ]
+ */
+
+type postCommentData = {
+    postId: string;
+    text: string;
+};
+
+export const postComment = ({ postId, text }: postCommentData) =>
+    axiosInstance()
+        .post(`${endpoints.posts}/${postId}/comments`, { text })
+        .then((response) => response.data)
+        .catch((error: any) => {
+            return error?.response?.data;
+        });
+
+/*
+ *Comments - [ DELETE ]
+ */
+
+type deleteCommentData = {
+    postId: string;
+    commentId: string;
+};
+export const deleteComment = ({ postId, commentId }: deleteCommentData) =>
+    axiosInstance()
+        .delete(`${endpoints.posts}/${postId}/comments/${commentId}`)
+        .then((response) => response.data)
+        .catch((error: any) => {
+            return error?.response?.data;
+        });
+
+/*
+ *Likes - [ POST ]
+ */
+export const postLike = (postId: string) =>
+    axiosInstance()
+        .post(`${endpoints.posts}/${postId}/like`)
+        .then((response) => response.data)
+        .catch((error: any) => {
+            return error?.response?.data;
+        });
+
+/*
+ *Likes - [ DELETE ]
+ */
+export const deleteLike = (postId: string) =>
+    axiosInstance()
+        .delete(`${endpoints.posts}/${postId}/like`)
+        .then((response) => response.data)
+        .catch((error: any) => {
+            return error?.response?.data;
+        });
+
+/*
+ *Accounts - [ GET ]
+ */
+export const getMe = () =>
+    axiosInstance()
+        .get(`${endpoints.accounts}/me`)
         .then((response) => response.data)
         .catch((error: any) => {
             return error?.response?.data;

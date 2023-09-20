@@ -22,6 +22,12 @@ import useCommentsByPostId from '../hooks/useCommentsByPostId';
 import usePost from '../hooks/usePost';
 import CommentCard, { IComment } from '../ui-elements/CommentCard';
 import styles from './PostDetailsModal.module.css';
+import PostFooterActions from '../ui-elements/PostFooterActions';
+import useLikeDeletion from '../hooks/useLikeDeletion';
+import useLikeCreation from '../hooks/useLikeCreation';
+import { useForm } from '@/hooks/useForm';
+import useCommentCreation from '../hooks/useCommentCreation';
+import useCommentDeletion from '../hooks/useCommentDeletion';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiPaper-root': {
@@ -39,6 +45,7 @@ const PostDetailsModal = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const location = useLocation();
     const modalId = searchParams.get('modalId') as string;
+    const { fields, onChange, onReset } = useForm({ text: '' });
     const {
         data: postData,
         isFetching: isPostFetching,
@@ -49,12 +56,32 @@ const PostDetailsModal = () => {
         isFetching: isCommentsFetching,
         isLoading: isCommentsLoading,
     } = useCommentsByPostId(modalId);
+    const {
+        mutate: addLikeToPost,
+        isIdle: isLikeCreationIdle,
+        isLoading: isAddLikeCreationLoading,
+    } = useLikeCreation();
+    const {
+        mutate: removeLikeByPost,
+        isIdle: isLikeDelitionIdle,
+        isLoading: isLikeDelitionLoading,
+    } = useLikeDeletion();
+    const { mutate: createComment } = useCommentCreation();
+    const { mutate: deleteComment } = useCommentDeletion();
 
     const handleClose = () => {
         if (modalId) {
             location.search = '';
             setSearchParams(location.search);
         }
+    };
+
+    const handlePostLike = (postId: string) => {
+        addLikeToPost(postId);
+    };
+
+    const handleDeleteLike = (postId: string) => {
+        removeLikeByPost(postId);
     };
 
     if (
@@ -160,61 +187,62 @@ const PostDetailsModal = () => {
                         sx={{
                             '.MuiInput-root': {
                                 display: 'flex',
-                                flexDirection: 'row-reverse',
                                 fontSize: '14px',
                             },
                         }}
+                        name="text"
+                        value={fields?.text}
+                        onChange={onChange}
                         fullWidth
                         variant="standard"
                         placeholder="Write a comment"
                         InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="end">
-                                    <FontAwesomeIcon icon={faPaperPlane} />
+                            endAdornment: (
+                                <InputAdornment
+                                    position="end"
+                                    sx={{
+                                        cursor: 'pointer',
+                                        color: fields.text
+                                            ? BaseColors.BLUE
+                                            : BaseColors.GREY2,
+                                    }}
+                                >
+                                    <FontAwesomeIcon
+                                        icon={faPaperPlane}
+                                        onClick={() => {
+                                            createComment({
+                                                postId: post?.post_id,
+                                                text: fields?.text,
+                                            });
+                                            onReset();
+                                        }}
+                                    />
                                 </InputAdornment>
                             ),
                         }}
                     />
-                    <Box display="flex" sx={{ gap: '20px' }}>
-                        <Button
-                            variant="contained"
-                            color="quatinary"
-                            sx={{ width: 90, display: 'flex', gap: 3 }}
-                        >
-                            <FontAwesomeIcon
-                                fontSize={19}
-                                color={BaseColors.GREY4}
-                                icon={faHeart}
-                            />
-                            <Typography variant="p2" color="secondary">
-                                {post?.likes ? post.likes : 0}
-                            </Typography>
-                        </Button>
-                        <Button
-                            variant="contained"
-                            color="quatinary"
-                            sx={{ width: 90, display: 'flex', gap: 3 }}
-                        >
-                            <FontAwesomeIcon
-                                fontSize={19}
-                                color={BaseColors.GREY4}
-                                icon={faComment}
-                            />
-                            <Typography variant="p2" color="secondary">
-                                {post?.comments ? post.comments : 0}
-                            </Typography>
-                        </Button>
-                    </Box>
-                    {post?.comments ? (
-                        <Typography variant="h2">
-                            {post.comments} Comments
-                        </Typography>
-                    ) : null}
+                    <PostFooterActions
+                        liked={post?.liked}
+                        likes={post?.likes}
+                        comments={comments.length}
+                        handlePostLike={() => handlePostLike(post?.post_id)}
+                        handleDeleteLike={() => handleDeleteLike(post?.post_id)}
+                    />
+
+                    <Typography variant="h2">
+                        {post?.comments ? post.comments : 0} Comments
+                    </Typography>
 
                     {comments?.map((comment: IComment) => {
                         return (
                             <CommentCard
                                 key={comment.comment_id}
+                                deleteComment={(commentData) =>
+                                    deleteComment({
+                                        postId: post?._id,
+                                        commentId: commentData?.commentId,
+                                    })
+                                }
                                 {...comment}
                             />
                         );
