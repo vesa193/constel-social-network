@@ -1,5 +1,5 @@
 .link {
-    color: #157eff;
+    color: #222222;
     text-decoration: none;
     text-transform: capitalize;
     font-family: 'Roboto-Bold';
@@ -8,7 +8,12 @@
     align-items: center;
     gap: 10px;
 
-    &:hover {
+    &.active {
+        color: #157eff;
+    }
+
+    &:hover,
+    &:hover > svg {
         color: #157eff;
     }
 }

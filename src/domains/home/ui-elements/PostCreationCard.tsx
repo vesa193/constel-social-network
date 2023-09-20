@@ -8,6 +8,7 @@ import { faMicrophone, faStop } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Avatar, Box, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
+import styles from './PostCreationCard.module.css';
 
 type Fields = {
     text: '';
@@ -47,6 +48,7 @@ const PostCreationCard = ({
 
     return (
         <Box
+            className={styles.postCreationCard}
             display="flex"
             sx={{
                 borderRadius: '10px',
@@ -105,6 +107,7 @@ const PostCreationCard = ({
                                     height: 30,
                                     borderRadius: '50%',
                                     backgroundColor: baseColors.tertiary,
+                                    cursor: 'pointer',
                                 }}
                                 onClick={() => {
                                     setIsStartRecording(true);
@@ -157,7 +160,7 @@ const PostCreationCard = ({
                     alignItems="center"
                 >
                     {!permission && (
-                        <Box>
+                        <Box sx={{ cursor: 'pointer' }}>
                             <FontAwesomeIcon
                                 onClick={getMicrophonePermission}
                                 icon={faMicrophone}
@@ -171,17 +174,18 @@ const PostCreationCard = ({
                         alignItems="center"
                         sx={{ gap: '20px', cursor: 'pointer' }}
                     >
-                        {audioSrc ? (
+                        {permission ? (
                             <FontAwesomeIcon
                                 icon={faTrashCan}
                                 fontSize={24}
                                 color={BaseColors.RED}
                                 onClick={handleDeleteAudioRecorder}
+                                style={{ cursor: 'pointer' }}
                             />
                         ) : null}
                         <BaseButton
                             color="tertiary"
-                            isDisabled={!(audioSrc || fields?.text)}
+                            isDisabled={!fields?.text}
                             onClick={handleCreatePost}
                         >
                             New Post

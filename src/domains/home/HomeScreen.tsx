@@ -1,4 +1,5 @@
 import Spinner from '@/components/spinner/Spinner';
+import { useForm } from '@/hooks/useForm';
 import Drawer from '@components/drawer/Drawer';
 import Navigation from '@components/navigation/Navigation';
 import { Box } from '@mui/material';
@@ -8,12 +9,11 @@ import { useNavigate } from 'react-router-dom';
 import styles from './HomeScreen.module.css';
 import useLikeCreation from './hooks/useLikeCreation';
 import useLikeDeletion from './hooks/useLikeDeletion';
+import useMyAccount from './hooks/useMyAccount';
+import usePostCreation from './hooks/usePostCreation';
 import usePosts from './hooks/usePosts';
 import PostCard, { IPostCard } from './ui-elements/PostCard';
 import PostCreationCard from './ui-elements/PostCreationCard';
-import useMyAccount from './hooks/useMyAccount';
-import usePostCreation from './hooks/usePostCreation';
-import { useForm } from '@/hooks/useForm';
 
 const HomePage = () => {
     const theme = useTheme();
@@ -36,6 +36,7 @@ const HomePage = () => {
     const mediaRecorder = useRef<null | any>(null);
     const [recordingStatus, setRecordingStatus] = useState('inactive');
     const [audioChunks, setAudioChunks] = useState<any[]>([]);
+    const [binaryAudio, setBinaryAudio] = useState<Blob | null>(null);
     const [audio, setAudio] = useState(null);
     const mimeType = 'audio/webm';
     const audioPlayerRef = useRef();
@@ -71,6 +72,7 @@ const HomePage = () => {
         mediaRecorder.current.onstop = () => {
             //creates a blob file from the audiochunks data
             const audioBlob = new Blob(audioChunks, { type: mimeType });
+            setBinaryAudio(audioBlob);
             //creates a playable URL from the blob file.
             const audioUrl = URL.createObjectURL(audioBlob);
             setAudio(audioUrl as any);
@@ -110,11 +112,11 @@ const HomePage = () => {
 
     const handleCreatePost = () => {
         const formData = new FormData();
-        audio && formData.append('audio', audio);
+        binaryAudio && formData.append('audio', binaryAudio);
         fields?.text && formData.append('text', fields?.text);
-        // console.log('INFF', fields.text, audio);
         createPost(formData);
         onReset();
+        handleDeleteAudioRecorder();
     };
 
     return (

@@ -1,6 +1,6 @@
 import Spinner from '@/components/spinner/Spinner';
 import { useForm } from '@/hooks/useForm';
-import { BaseColors } from '@/themes/colors';
+import { BaseColors, baseColors } from '@/themes/colors';
 import { formatDate } from '@/utils/utils';
 import { faCalendar, faPaperPlane } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,7 +11,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import useCommentCreation from '../hooks/useCommentCreation';
 import useCommentDeletion from '../hooks/useCommentDeletion';
@@ -30,14 +30,12 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
         padding: theme.spacing(2),
     },
-    '& .MuiDialogActions-root': {
-        padding: theme.spacing(1),
-    },
 }));
 
 const PostDetailsModal = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const location = useLocation();
+    const theme = useTheme();
     const modalId = searchParams.get('modalId') as string;
     const { fields, onChange, onReset } = useForm({ text: '' });
     const {
@@ -70,10 +68,6 @@ const PostDetailsModal = () => {
         removeLikeByPost(postId);
     };
 
-    // if (!postData || !commentsList) {
-    //     return null;
-    // }
-
     const post = postData?.post;
     const comments = commentsList?.comments;
 
@@ -88,13 +82,20 @@ const PostDetailsModal = () => {
                 }
             />
             <BootstrapDialog
-                // className={styles.postDetailsModal}
                 onClose={handleClose}
                 aria-labelledby="customized-dialog-title"
                 open={!!modalId}
                 sx={{
                     '.MuiDialog-paper': {
                         background: BaseColors.GREY1,
+                        [theme.breakpoints.down('sm')]: {
+                            margin: 0,
+                            maxWidth: 'none',
+                            minWidth: 240,
+                            width: '100%',
+                            maxHeight: '100vh',
+                            borderRadius: 0,
+                        },
                     },
                 }}
             >
@@ -173,6 +174,13 @@ const PostDetailsModal = () => {
                                 display: 'flex',
                                 fontSize: '14px',
                             },
+                            '.MuiInputBase-root.MuiInput-root::after': {
+                                borderColor: baseColors.tertiary,
+                            },
+                            '& .MuiInputBase-root.MuiInput-root:hover:not(.Mui-disabled, .Mui-error):before':
+                                {
+                                    borderColor: baseColors.tertiary,
+                                },
                         }}
                         name="text"
                         value={fields?.text}
@@ -194,6 +202,8 @@ const PostDetailsModal = () => {
                                     <FontAwesomeIcon
                                         icon={faPaperPlane}
                                         onClick={() => {
+                                            if (!fields?.text) return;
+
                                             createComment({
                                                 postId: post?.post_id,
                                                 text: fields?.text,

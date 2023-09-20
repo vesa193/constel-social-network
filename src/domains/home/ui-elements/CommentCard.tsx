@@ -2,6 +2,7 @@ import { BaseColors } from '@/themes/colors';
 import { formatDate } from '@/utils/utils';
 import { faCalendar, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTheme } from '@mui/material/styles';
 import { Avatar, Box, Typography } from '@mui/material';
 
 type DeleteCommentParam = {
@@ -31,6 +32,7 @@ const CommentCard = ({
     username,
     deleteComment,
 }: CommentCardProps) => {
+    const theme = useTheme();
     return (
         <Box sx={{ display: 'grid', gap: '15px' }}>
             <Box
@@ -38,7 +40,12 @@ const CommentCard = ({
                 justifyContent="space-between"
                 alignItems="center"
             >
-                <Box display="flex" sx={{ gap: '10px' }}>
+                <Box
+                    display="flex"
+                    sx={{
+                        gap: '10px',
+                    }}
+                >
                     <Avatar
                         sx={{
                             width: 40,
@@ -58,7 +65,17 @@ const CommentCard = ({
                         </Typography>
                     </Box>
                 </Box>
-                <Box display="flex" sx={{ gap: '15px' }}>
+                <Box
+                    display="flex"
+                    sx={{
+                        gap: '15px',
+                        '& .MuiBox-root': {
+                            [theme.breakpoints.down('sm')]: {
+                                flexDirection: 'column',
+                            },
+                        },
+                    }}
+                >
                     <Box display="flex" sx={{ gap: '5px' }}>
                         <FontAwesomeIcon
                             icon={faCalendar}
@@ -80,7 +97,17 @@ const CommentCard = ({
                             icon={faTrashAlt}
                             color={BaseColors.RED}
                         />
-                        <Typography variant="p3" color="error">
+                        <Typography
+                            variant="p3"
+                            color="error"
+                            sx={{
+                                '.MuiTypography-root': {
+                                    [theme.breakpoints.down('xs')]: {
+                                        display: 'none',
+                                    },
+                                },
+                            }}
+                        >
                             Delete
                         </Typography>
                     </Box>

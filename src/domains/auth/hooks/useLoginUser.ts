@@ -17,7 +17,7 @@ const useLoginUser = () => {
                 localStorage.setItem('token', data?.token);
                 navigate(routePaths.HOME, {
                     replace: true,
-                    state: { from: routePaths.LOGIN, token: data.token },
+                    state: { from: routePaths.LOGIN },
                 });
                 axios.defaults.headers[
                     'Authorization'
