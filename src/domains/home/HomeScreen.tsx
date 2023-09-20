@@ -39,15 +39,11 @@ const HomePage = () => {
     const [recordingStatus, setRecordingStatus] = useState('inactive');
     const [audioChunks, setAudioChunks] = useState<any[]>([]);
     const [audio, setAudio] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const mimeType = 'audio/webm';
+    const audioPlayerRef = useRef();
 
     const getMicrophonePermission = async () => {
-        const microphone = document.querySelector(
-            'div[data-clickable="audio-record"]'
-        )!;
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            // console.log('getUserMedia supported.');
             try {
                 // Success callback
                 const streamData = await navigator.mediaDevices.getUserMedia(
@@ -65,7 +61,6 @@ const HomePage = () => {
                 );
             }
         } else {
-            // console.log('getUserMedia not supported on your browser!');
         }
     };
 
@@ -108,6 +103,10 @@ const HomePage = () => {
         removeLikeByPost(postId);
     };
 
+    const handleCreatePost = () => {
+        // TODO: handle create post
+    };
+
     return (
         <Box className={styles.home}>
             <Spinner
@@ -136,6 +135,7 @@ const HomePage = () => {
                     }}
                 >
                     <PostCardCreation
+                        audioPlayerRef={audioPlayerRef}
                         pictureSrc={meData?.account?.picture}
                         audio={audio}
                         permission={permission}
@@ -152,7 +152,6 @@ const HomePage = () => {
                                 handlePostLike={handleAddLikeToPost}
                                 handleDeleteLike={handleRemoveLikeByPost}
                                 handleOpenModal={(postId: string) => {
-                                    setIsModalOpen(true);
                                     navigate({
                                         search: `?modalId=${postId}`,
                                     });

@@ -8,7 +8,9 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Avatar, Box, Divider, TextField, Typography } from '@mui/material';
 import BaseButton from '@components/button/BaseButton';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { formatTime } from '@/utils/utils';
+import AudioRecorder from '@/components/audio/AudioRecorder';
 
 type IPostCardCreation = {
     permission: boolean;
@@ -18,9 +20,11 @@ type IPostCardCreation = {
     onStopRecord: () => void;
     audio?: string | any;
     pictureSrc: string;
+    audioPlayerRef: any;
 };
 
 const PostCardCreation = ({
+    audioPlayerRef,
     pictureSrc,
     onStartRecord,
     onStopRecord,
@@ -31,35 +35,54 @@ const PostCardCreation = ({
 }: IPostCardCreation) => {
     const [isStartRecording, setIsStartRecording] = useState<boolean>(false);
     const [isPlayAudio, setIsPlayAudio] = useState<boolean>(false);
-    const currentTime = useRef(0);
-    let intervalId: any;
+    const [duration, setDuration] = useState(0);
+    const [currentTime, setCurrentTime] = useState(0);
+    let intervalId = useRef();
+    const audio = new Audio(audioSrc);
+    const durationTimeRef = useRef(0);
+    const currentTimeRef = useRef(0);
+    let interval: any;
 
-    const onPlayAudio = () => {
-        const audio = new Audio(audioSrc);
-        audio.play();
-        setIsPlayAudio(true);
-
-        audio.onloadedmetadata = function () {
-            // console.log('INF^^^', audio.duration);
-        };
-
-        // console.log('INFOo2122', currentTime.current, audio.duration);
-
-        intervalId = setInterval(() => {
-            currentTime.current = audio.currentTime;
-            // console.log('CURRENT time', audio.currentTime);
-        }, 1000);
-
-        if (currentTime.current === audio.duration) {
-            clearInterval(intervalId);
+    useEffect(() => {
+        if (isPlayAudio) {
+            audio.play();
+            audio.addEventListener('durationchange', (e: Event) => {
+                if (audio?.duration !== Infinity) {
+                    const seconds = Math.round(audio.duration);
+                    setDuration(seconds);
+                }
+            });
+            return;
         }
+
+        audio.pause();
+    }, [isPlayAudio]);
+
+    useEffect(() => {
+        startTime();
+        return () => clearInterval(interval);
+    }, [isPlayAudio, setCurrentTime]);
+
+    const startTime = () => {
+        interval = setInterval(() => {
+            if (audio?.ended) {
+                setIsPlayAudio(false);
+            }
+
+            if (isPlayAudio) {
+                const currentTimeSeconds = Math.round(audio?.currentTime);
+                setCurrentTime(currentTimeSeconds);
+            }
+        }, 1000);
     };
 
-    const onStopAudio = () => {
-        const audio = new Audio(audioSrc);
-        audio.pause();
-        setIsPlayAudio(false);
-        clearInterval(intervalId);
+    const handlePlayAudio = (isPlaying: boolean) => {
+        if (isPlaying) {
+            setIsPlayAudio(isPlaying);
+            return;
+        }
+
+        setIsPlayAudio(isPlaying);
     };
 
     return (
@@ -147,80 +170,12 @@ const PostCardCreation = ({
                     </Box>
                 )}
                 {audioSrc ? (
-                    <Box
-                        className="audio-player"
-                        display="flex"
-                        alignItems="center"
-                        sx={{
-                            padding: '12px',
-                            background: baseColors.greyLight,
-                            borderRadius: '10px',
-                            gap: '10px',
-                        }}
-                    >
-                        <audio src={audioSrc}></audio>
-                        {!isPlayAudio ? (
-                            <Box
-                                data-clickable="play-audio"
-                                display="flex"
-                                justifyContent="center"
-                                alignItems="center"
-                                sx={{
-                                    width: 30,
-                                    height: 30,
-                                    borderRadius: '50%',
-                                    backgroundColor: baseColors.tertiary,
-                                }}
-                                onClick={onPlayAudio}
-                            >
-                                <FontAwesomeIcon
-                                    icon={faPlay}
-                                    color={BaseColors.WHITE}
-                                    fontSize={14}
-                                />
-                            </Box>
-                        ) : (
-                            <Box
-                                data-clickable="stop-audio"
-                                display="flex"
-                                justifyContent="center"
-                                alignItems="center"
-                                sx={{
-                                    width: 30,
-                                    height: 30,
-                                    borderRadius: '50%',
-                                    backgroundColor: baseColors.tertiary,
-                                }}
-                                onClick={onStopAudio}
-                            >
-                                <FontAwesomeIcon
-                                    icon={faPause}
-                                    color={BaseColors.WHITE}
-                                    fontSize={14}
-                                />
-                            </Box>
-                        )}
-                        <Divider
-                            className="timeline"
-                            sx={{
-                                borderColor: BaseColors.GREY4,
-                                flex: 1,
-                                display: 'flex',
-                                alignItems: 'center',
-                            }}
-                        />
-                        <Box display="flex">
-                            <Typography variant="p3" color="secondary">
-                                00:00
-                            </Typography>
-                            <Typography variant="p3" color="secondary">
-                                /
-                            </Typography>
-                            <Typography variant="p3" color="secondary">
-                                00:04
-                            </Typography>
-                        </Box>
-                    </Box>
+                    <AudioRecorder
+                        isPlayAudio={isPlayAudio}
+                        currentTime={currentTime}
+                        duration={duration}
+                        handlePlayAudio={handlePlayAudio}
+                    />
                 ) : null}
                 <Box
                     display="flex"
