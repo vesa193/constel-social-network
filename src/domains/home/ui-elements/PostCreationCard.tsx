@@ -1,4 +1,4 @@
-import AudioRecorder from '@/components/audio/AudioRecorder';
+import AudioRecorder from '@/components/audio/AudioPlayer';
 import { configApp } from '@/config';
 import useAudio from '@/hooks/useAudio';
 import { BaseColors, baseBackground, baseColors } from '@/themes/colors';

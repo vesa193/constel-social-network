@@ -1,4 +1,4 @@
-import AudioRecorder from '@/components/audio/AudioRecorder';
+import AudioRecorder from '@/components/audio/AudioPlayer';
 import { BaseColors, baseBackground } from '@/themes/colors';
 import { formatDate } from '@/utils/utils';
 import { faCalendar } from '@fortawesome/free-regular-svg-icons';

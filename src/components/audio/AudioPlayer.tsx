@@ -4,19 +4,19 @@ import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Divider, Typography } from '@mui/material';
 
-type AudioRecorderProps = {
+type AudioPlayerProps = {
     isPlayAudio: boolean;
     currentTime: number;
     duration: number;
     handlePlayAudio: (isPlayin: boolean) => void;
 };
 
-const AudioRecorder = ({
+const AudioPlayer = ({
     isPlayAudio,
     currentTime,
     duration,
     handlePlayAudio,
-}: AudioRecorderProps) => {
+}: AudioPlayerProps) => {
     return (
         <Box
             className="audio-player"
@@ -41,6 +41,7 @@ const AudioRecorder = ({
                         height: 30,
                         borderRadius: '50%',
                         backgroundColor: baseColors.tertiary,
+                        cursor: 'pointer',
                     }}
                     onClick={() => handlePlayAudio(true)}
                 >
@@ -61,6 +62,7 @@ const AudioRecorder = ({
                         height: 30,
                         borderRadius: '50%',
                         backgroundColor: baseColors.tertiary,
+                        cursor: 'pointer',
                     }}
                     onClick={() => handlePlayAudio(false)}
                 >
@@ -99,5 +101,5 @@ const AudioRecorder = ({
     );
 };
 
-AudioRecorder.displayName = 'AudioRecorder';
-export default AudioRecorder;
+AudioPlayer.displayName = 'AudioPlayer';
+export default AudioPlayer;

@@ -22,6 +22,8 @@ import usePost from '../hooks/usePost';
 import CommentCard, { IComment } from '../ui-elements/CommentCard';
 import PostFooterActions from '../ui-elements/PostFooterActions';
 import styles from './PostDetailsModal.module.css';
+import useAudio from '@/hooks/useAudio';
+import AudioRecorder from '@/components/audio/AudioPlayer';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiPaper-root': {
@@ -48,10 +50,15 @@ const PostDetailsModal = () => {
         isFetching: isCommentsFetching,
         isLoading: isCommentsLoading,
     } = useCommentsByPostId(modalId);
+    const post = postData?.post;
+    const comments = commentsList?.comments;
     const { mutate: addLikeToPost } = useLikeCreation();
     const { mutate: removeLikeByPost } = useLikeDeletion();
     const { mutate: createComment } = useCommentCreation();
     const { mutate: deleteComment } = useCommentDeletion();
+    const { isPlayAudio, handlePlayAudio, currentTime, duration } = useAudio(
+        post?.audio || ''
+    );
 
     const handleClose = () => {
         if (modalId) {
@@ -67,9 +74,6 @@ const PostDetailsModal = () => {
     const handleDeleteLike = (postId: string) => {
         removeLikeByPost(postId);
     };
-
-    const post = postData?.post;
-    const comments = commentsList?.comments;
 
     return (
         <div>
@@ -157,6 +161,14 @@ const PostDetailsModal = () => {
                     <Typography gutterBottom>
                         {post?.text ? post.text : ''}
                     </Typography>
+                    {post?.audio ? (
+                        <AudioRecorder
+                            handlePlayAudio={handlePlayAudio}
+                            currentTime={currentTime}
+                            duration={duration}
+                            isPlayAudio={isPlayAudio}
+                        />
+                    ) : null}
                     <Box display="flex" sx={{ gap: '5px' }}>
                         <FontAwesomeIcon
                             icon={faCalendar}
