@@ -14,7 +14,6 @@ import PostCreationCard from './ui-elements/PostCreationCard';
 import useMyAccount from './hooks/useMyAccount';
 import usePostCreation from './hooks/usePostCreation';
 import { useForm } from '@/hooks/useForm';
-import { SettingsPowerRounded } from '@mui/icons-material';
 
 const HomePage = () => {
     const theme = useTheme();

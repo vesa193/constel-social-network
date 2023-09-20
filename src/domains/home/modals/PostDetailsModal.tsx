@@ -1,16 +1,11 @@
-import { BaseColors, baseColors } from '@/themes/colors';
+import Spinner from '@/components/spinner/Spinner';
+import { useForm } from '@/hooks/useForm';
+import { BaseColors } from '@/themes/colors';
 import { formatDate } from '@/utils/utils';
-import testPhoto from '@assets/img/test-photo.jpeg';
-import {
-    faCalendar,
-    faComment,
-    faPaperPlane,
-} from '@fortawesome/free-regular-svg-icons';
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faCalendar, faPaperPlane } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CloseIcon from '@mui/icons-material/Close';
 import { Avatar, Box, InputAdornment, TextField } from '@mui/material';
-import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -18,17 +13,15 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { useLocation, useSearchParams } from 'react-router-dom';
-import useCommentsByPostId from '../hooks/useCommentsByPostId';
-import usePost from '../hooks/usePost';
-import CommentCard, { IComment } from '../ui-elements/CommentCard';
-import styles from './PostDetailsModal.module.css';
-import PostFooterActions from '../ui-elements/PostFooterActions';
-import useLikeDeletion from '../hooks/useLikeDeletion';
-import useLikeCreation from '../hooks/useLikeCreation';
-import { useForm } from '@/hooks/useForm';
 import useCommentCreation from '../hooks/useCommentCreation';
 import useCommentDeletion from '../hooks/useCommentDeletion';
-import Spinner from '@/components/spinner/Spinner';
+import useCommentsByPostId from '../hooks/useCommentsByPostId';
+import useLikeCreation from '../hooks/useLikeCreation';
+import useLikeDeletion from '../hooks/useLikeDeletion';
+import usePost from '../hooks/usePost';
+import CommentCard, { IComment } from '../ui-elements/CommentCard';
+import PostFooterActions from '../ui-elements/PostFooterActions';
+import styles from './PostDetailsModal.module.css';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiPaper-root': {
@@ -57,16 +50,8 @@ const PostDetailsModal = () => {
         isFetching: isCommentsFetching,
         isLoading: isCommentsLoading,
     } = useCommentsByPostId(modalId);
-    const {
-        mutate: addLikeToPost,
-        isIdle: isLikeCreationIdle,
-        isLoading: isAddLikeCreationLoading,
-    } = useLikeCreation();
-    const {
-        mutate: removeLikeByPost,
-        isIdle: isLikeDelitionIdle,
-        isLoading: isLikeDelitionLoading,
-    } = useLikeDeletion();
+    const { mutate: addLikeToPost } = useLikeCreation();
+    const { mutate: removeLikeByPost } = useLikeDeletion();
     const { mutate: createComment } = useCommentCreation();
     const { mutate: deleteComment } = useCommentDeletion();
 

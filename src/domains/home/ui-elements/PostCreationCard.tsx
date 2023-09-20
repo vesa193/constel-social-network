@@ -171,12 +171,14 @@ const PostCreationCard = ({
                         alignItems="center"
                         sx={{ gap: '20px', cursor: 'pointer' }}
                     >
-                        <FontAwesomeIcon
-                            icon={faTrashCan}
-                            fontSize={24}
-                            color={BaseColors.RED}
-                            onClick={handleDeleteAudioRecorder}
-                        />
+                        {audioSrc ? (
+                            <FontAwesomeIcon
+                                icon={faTrashCan}
+                                fontSize={24}
+                                color={BaseColors.RED}
+                                onClick={handleDeleteAudioRecorder}
+                            />
+                        ) : null}
                         <BaseButton
                             color="tertiary"
                             isDisabled={!(audioSrc || fields?.text)}
