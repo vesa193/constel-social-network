@@ -1,16 +1,10 @@
-import { BaseColors, baseBackground, baseColors } from '@/themes/colors';
-import {
-    faMicrophone,
-    faPause,
-    faPlay,
-    faStop,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Avatar, Box, Divider, TextField, Typography } from '@mui/material';
-import BaseButton from '@components/button/BaseButton';
-import { useEffect, useRef, useState } from 'react';
-import { formatTime } from '@/utils/utils';
 import AudioRecorder from '@/components/audio/AudioRecorder';
+import { BaseColors, baseBackground, baseColors } from '@/themes/colors';
+import BaseButton from '@components/button/BaseButton';
+import { faMicrophone, faStop } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Avatar, Box, TextField } from '@mui/material';
+import { useEffect, useState } from 'react';
 
 type IPostCardCreation = {
     permission: boolean;
@@ -24,29 +18,24 @@ type IPostCardCreation = {
 };
 
 const PostCardCreation = ({
-    audioPlayerRef,
     pictureSrc,
     onStartRecord,
     onStopRecord,
     getMicrophonePermission,
     permission,
-    recording,
     audio: audioSrc,
 }: IPostCardCreation) => {
     const [isStartRecording, setIsStartRecording] = useState<boolean>(false);
     const [isPlayAudio, setIsPlayAudio] = useState<boolean>(false);
     const [duration, setDuration] = useState(0);
     const [currentTime, setCurrentTime] = useState(0);
-    let intervalId = useRef();
     const audio = new Audio(audioSrc);
-    const durationTimeRef = useRef(0);
-    const currentTimeRef = useRef(0);
     let interval: any;
 
     useEffect(() => {
         if (isPlayAudio) {
             audio.play();
-            audio.addEventListener('durationchange', (e: Event) => {
+            audio.addEventListener('durationchange', (_e: Event) => {
                 if (audio?.duration !== Infinity) {
                     const seconds = Math.round(audio.duration);
                     setDuration(seconds);
