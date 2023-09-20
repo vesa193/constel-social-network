@@ -1,10 +1,12 @@
 import { Box, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import styles from './Navigation.module.css';
 
 const Navigation = () => {
     const theme = useTheme();
     return (
         <Box
+            className={styles.navigation}
             component="nav"
             sx={{
                 position: 'sticky' || '-webkit-sticky',

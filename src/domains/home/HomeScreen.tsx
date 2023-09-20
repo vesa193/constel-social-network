@@ -126,6 +126,7 @@ const HomePage = () => {
             >
                 <Navigation />
                 <Box
+                    className={styles.content}
                     component="section"
                     sx={{
                         flex: 1,

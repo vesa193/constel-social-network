@@ -9,6 +9,7 @@ import styles from './Drawer.module.css';
 const Drawer = () => {
     return (
         <Box
+            className={styles.drawer}
             display="flex"
             justifyContent="center"
             sx={{ flexBasis: '200px', paddingTop: '20px' }}

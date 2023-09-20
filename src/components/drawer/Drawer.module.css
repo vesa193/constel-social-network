@@ -12,3 +12,14 @@
         color: #157eff;
     }
 }
+
+@media screen and (max-width: 640px) {
+    .drawer {
+        & > div {
+            flex-direction: row;
+        }
+    }
+    .link {
+        display: none;
+    }
+}

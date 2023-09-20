@@ -2,5 +2,20 @@
     width: 100%;
     height: 100vh;
     display: grid;
-    grid-template-columns: 1fr clamp(300px, 50%, 980px) 1fr;
+    grid-template-columns: 1fr clamp(300px, 60%, 980px) 1fr;
+}
+
+@media screen and (max-width: 640px) {
+    .home {
+        grid-template-columns: clamp(300px, 100%, 980px);
+        place-content: center;
+        & > nav,
+        & > section {
+            display: none;
+        }
+
+        & .content {
+            border: 0;
+        }
+    }
 }
