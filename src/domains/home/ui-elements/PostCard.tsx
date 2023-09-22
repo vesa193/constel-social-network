@@ -7,6 +7,7 @@ import { Avatar, Box, Typography } from '@mui/material';
 import styles from './PostCard.module.css';
 import PostFooterActions from './PostFooterActions';
 import useAudio from '@/hooks/useAudio';
+import { useRef } from 'react';
 
 export type IUser = {
     full_name: string;
@@ -44,8 +45,10 @@ const PostCard = ({
     handlePostLike,
     handleDeleteLike,
 }: IPostCard) => {
+    const audioRef = useRef();
     const { handlePlayAudio, currentTime, duration, isPlayAudio } = useAudio(
-        audio || ''
+        audio || '',
+        audioRef
     );
     return (
         <Box
@@ -107,6 +110,7 @@ const PostCard = ({
 
             {audio ? (
                 <AudioRecorder
+                    ref={audioRef}
                     handlePlayAudio={handlePlayAudio}
                     currentTime={currentTime}
                     duration={duration}

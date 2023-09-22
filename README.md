@@ -2,7 +2,7 @@
 
 ## Minimum requires
 
-Node version of 18 is minim required for using the app. 
+Node version of 18 is minim required for using the app.
 
 ```js
     engines: {

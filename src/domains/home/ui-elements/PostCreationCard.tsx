@@ -7,7 +7,7 @@ import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { faMicrophone, faStop } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Avatar, Box, TextField, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './PostCreationCard.module.css';
 
 type Fields = {
@@ -41,10 +41,16 @@ const PostCreationCard = ({
     fields,
     onChange,
 }: IPostCardCreation) => {
+    const audioRef = useRef();
     const { isPlayAudio, duration, currentTime, handlePlayAudio } = useAudio(
-        audioSrc || ''
+        audioSrc || '',
+        audioRef
     );
     const [isStartRecording, setIsStartRecording] = useState<boolean>(false);
+
+    useEffect(() => {
+        console.log('OVOVOOO', audioRef?.current);
+    }, []);
 
     return (
         <Box
@@ -148,6 +154,7 @@ const PostCreationCard = ({
                 )}
                 {audioSrc ? (
                     <AudioRecorder
+                        ref={audioRef}
                         isPlayAudio={isPlayAudio}
                         currentTime={currentTime}
                         duration={duration}
