@@ -9,42 +9,39 @@ const useAudio = (audioSrc: string, audioRef: any) => {
 
     useEffect(() => {
         if (audioRef?.current) {
+            console.log('audioRef?.current', audioRef?.current);
             audioRef.current.src = audioSrc;
-            console.log('IIII', audioRef?.current?.duration);
-            audioRef?.current.addEventListener('loadedmetadata', (e: Event) => {
-                console.log('ooooo', audioRef?.current?.duration, e);
-            });
         }
     }, []);
 
     useEffect(() => {
         if (audioRef?.current) {
-            audioRef?.current?.pause();
-            console.log(
-                'audioRef.current.currentTime',
-                audioRef.current.currentTime,
-                currentTime
-            );
+            audioRef?.current?.pause && audioRef?.current?.pause();
             const currentTimeSeconds = Math.round(
                 audioRef?.current?.currentTime
             );
             setCurrentTime(currentTimeSeconds);
-            // audioRef.current.currentTime = 0;
         }
 
         if (isPlayAudio) {
-            // audio.play();
-            audioRef?.current?.play();
+            audioRef?.current &&
+                audioRef?.current?.play &&
+                audioRef?.current?.play();
             audioRef?.current?.addEventListener(
                 'durationchange',
                 (_e: Event) => {
                     if (audioRef?.current?.duration !== Infinity) {
-                        console.log('DURATION', audioRef?.current?.duration);
                         const seconds = Math.round(audioRef?.current?.duration);
                         setDuration(seconds);
                     }
                 }
             );
+
+            audioRef?.current?.addEventListener('ended', (_e: Event) => {
+                setIsPlayAudio(false);
+                audioRef.current.currentTime = 0;
+                setCurrentTime(audioRef.current.currentTime);
+            });
             return;
         }
 
@@ -58,22 +55,21 @@ const useAudio = (audioSrc: string, audioRef: any) => {
 
     const stopTime = () => {
         if (!isPlayAudio) {
-            audioRef?.current?.pause();
+            audioRef?.current?.pause && audioRef?.current?.pause();
             const currentTimeSeconds = Math.round(
                 audioRef?.current?.currentTime
             );
-            console.log('Paused time', audioRef?.current?.currentTime);
             setCurrentTime(currentTimeSeconds);
         }
     };
 
     const startTime = () => {
         interval = setInterval(() => {
-            if (audioRef?.current?.ended) {
-                setIsPlayAudio(false);
-                audioRef.current.currentTime = 0;
-                setCurrentTime(audioRef.current.currentTime);
-            }
+            // if (audioRef?.current?.ended) {
+            //     setIsPlayAudio(false);
+            //     audioRef.current.currentTime = 0;
+            //     setCurrentTime(audioRef.current.currentTime);
+            // }
 
             if (isPlayAudio) {
                 const currentTimeSeconds = Math.round(

@@ -41,7 +41,7 @@ const HomePage = () => {
     const mimeType = 'audio/webm';
     const audioPlayerRef = useRef();
 
-    const formProp = { fields, onChange };
+    const formProp = { fields };
 
     const getMicrophonePermission = async () => {
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {

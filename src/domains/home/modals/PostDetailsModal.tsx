@@ -23,7 +23,8 @@ import CommentCard, { IComment } from '../ui-elements/CommentCard';
 import PostFooterActions from '../ui-elements/PostFooterActions';
 import styles from './PostDetailsModal.module.css';
 import useAudio from '@/hooks/useAudio';
-import AudioRecorder from '@/components/audio/AudioPlayer';
+import AudioPlayer from '@/components/audio/AudioPlayer';
+import { useRef } from 'react';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiPaper-root': {
@@ -56,8 +57,10 @@ const PostDetailsModal = () => {
     const { mutate: removeLikeByPost } = useLikeDeletion();
     const { mutate: createComment } = useCommentCreation();
     const { mutate: deleteComment } = useCommentDeletion();
+    const audioRef = useRef('');
     const { isPlayAudio, handlePlayAudio, currentTime, duration } = useAudio(
-        post?.audio || ''
+        post?.audio || '',
+        audioRef
     );
 
     const handleClose = () => {
@@ -162,7 +165,8 @@ const PostDetailsModal = () => {
                         {post?.text ? post.text : ''}
                     </Typography>
                     {post?.audio ? (
-                        <AudioRecorder
+                        <AudioPlayer
+                            ref={audioRef}
                             handlePlayAudio={handlePlayAudio}
                             currentTime={currentTime}
                             duration={duration}

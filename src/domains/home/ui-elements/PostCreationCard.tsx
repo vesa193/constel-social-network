@@ -1,14 +1,14 @@
 import AudioRecorder from '@/components/audio/AudioPlayer';
-import { configApp } from '@/config';
 import useAudio from '@/hooks/useAudio';
 import { BaseColors, baseBackground, baseColors } from '@/themes/colors';
 import BaseButton from '@components/button/BaseButton';
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { faMicrophone, faStop } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Avatar, Box, TextField, Typography } from '@mui/material';
-import { useEffect, useRef, useState } from 'react';
+import { Avatar, Box } from '@mui/material';
+import { useRef, useState } from 'react';
 import styles from './PostCreationCard.module.css';
+import PostCreationInput from './PostCreationInput';
 
 type Fields = {
     text: '';
@@ -26,7 +26,6 @@ type IPostCardCreation = {
     pictureSrc: string;
     audioPlayerRef: any;
     fields: Fields;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 const PostCreationCard = ({
@@ -39,18 +38,15 @@ const PostCreationCard = ({
     handleCreatePost,
     handleDeleteAudioRecorder,
     fields,
-    onChange,
 }: IPostCardCreation) => {
-    const audioRef = useRef();
+    const audioRef = useRef<HTMLAudioElement | null>(null);
     const { isPlayAudio, duration, currentTime, handlePlayAudio } = useAudio(
         audioSrc || '',
         audioRef
     );
     const [isStartRecording, setIsStartRecording] = useState<boolean>(false);
 
-    useEffect(() => {
-        console.log('OVOVOOO', audioRef?.current);
-    }, []);
+    console.log('AUDIO SRC ---', audioSrc);
 
     return (
         <Box
@@ -79,20 +75,7 @@ const PostCreationCard = ({
                 flexDirection="column"
                 sx={{ gap: '20px' }}
             >
-                <TextField
-                    name="text"
-                    variant="standard"
-                    placeholder="What's happening"
-                    value={fields?.text}
-                    autoComplete="off"
-                    onChange={onChange}
-                />
-
-                {fields?.text?.length > 0 ? (
-                    <Typography variant="p3" color="secondary">
-                        {fields?.text?.length}/{configApp.MAX_POST_CHARACTERS}
-                    </Typography>
-                ) : null}
+                <PostCreationInput />
 
                 {permission && !audioSrc && (
                     <Box
@@ -137,6 +120,7 @@ const PostCreationCard = ({
                                     height: 30,
                                     borderRadius: '50%',
                                     backgroundColor: baseColors.error,
+                                    cursor: 'pointer',
                                 }}
                                 onClick={() => {
                                     setIsStartRecording(false);

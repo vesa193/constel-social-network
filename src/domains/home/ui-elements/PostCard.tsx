@@ -45,7 +45,7 @@ const PostCard = ({
     handlePostLike,
     handleDeleteLike,
 }: IPostCard) => {
-    const audioRef = useRef();
+    const audioRef = useRef<HTMLAudioElement | null>(null);
     const { handlePlayAudio, currentTime, duration, isPlayAudio } = useAudio(
         audio || '',
         audioRef
@@ -111,6 +111,7 @@ const PostCard = ({
             {audio ? (
                 <AudioRecorder
                     ref={audioRef}
+                    audioRef={audioRef}
                     handlePlayAudio={handlePlayAudio}
                     currentTime={currentTime}
                     duration={duration}

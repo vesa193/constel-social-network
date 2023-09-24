@@ -1,21 +1,61 @@
+import useAudio from '@/hooks/useAudio';
 import { BaseColors, baseColors } from '@/themes/colors';
 import { formatTime } from '@/utils/utils';
-import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Divider, Typography } from '@mui/material';
-import { forwardRef } from 'react';
+import { forwardRef, useEffect } from 'react';
+import AudioControls from './AudioControls';
 
 type AudioPlayerProps = {
+    audioRef?: any;
     isPlayAudio: boolean;
     currentTime: number;
     duration: number;
     handlePlayAudio: (isPlayin: boolean) => void;
 };
 
-type Ref = any;
+type Ref = HTMLAudioElement | null;
 
 const AudioPlayer = forwardRef<Ref, AudioPlayerProps>(
-    ({ isPlayAudio, currentTime, duration, handlePlayAudio }, ref) => {
+    (
+        {
+            isPlayAudio,
+            currentTime,
+            duration,
+            handlePlayAudio,
+            audioRef: audioReference,
+        },
+        ref
+    ) => {
+        const audioRef = ref;
+
+        console.log('audioReference', audioReference, duration, currentTime);
+
+        const updateTimelineIndicator = () => {
+            // Calculate the percentage of progress
+            const progressPercentage = (currentTime / duration) * 100;
+            const timelineIndicator =
+                audioRef?.current?.nextSibling?.nextSibling?.querySelector(
+                    '.timeline-indicator'
+                )!;
+
+            if (isPlayAudio && !audioReference?.current?.ended) {
+                if (!timelineIndicator) return;
+                timelineIndicator.style.visibility = 'visible';
+                timelineIndicator.style.left = `${
+                    progressPercentage !== Infinity ? progressPercentage : 0
+                }%`;
+                return;
+            }
+
+            if (!timelineIndicator) return;
+            timelineIndicator.style.visibility = 'hidden';
+            timelineIndicator.style.left = 0;
+        };
+
+        useEffect(() => {
+            updateTimelineIndicator();
+        }, [currentTime, duration]);
+
         return (
             <Box
                 className="audio-player"
@@ -28,59 +68,35 @@ const AudioPlayer = forwardRef<Ref, AudioPlayerProps>(
                     gap: '10px',
                 }}
             >
-                <audio ref={ref} preload="auto"></audio>
-                {!isPlayAudio ? (
-                    <Box
-                        data-clickable="play-audio"
-                        display="flex"
-                        justifyContent="center"
-                        alignItems="center"
-                        sx={{
-                            width: 30,
-                            height: 30,
-                            borderRadius: '50%',
-                            backgroundColor: baseColors.tertiary,
-                            cursor: 'pointer',
-                        }}
-                        onClick={() => handlePlayAudio(true)}
-                    >
-                        <FontAwesomeIcon
-                            icon={faPlay}
-                            color={BaseColors.WHITE}
-                            fontSize={14}
-                        />
-                    </Box>
-                ) : (
-                    <Box
-                        data-clickable="stop-audio"
-                        display="flex"
-                        justifyContent="center"
-                        alignItems="center"
-                        sx={{
-                            width: 30,
-                            height: 30,
-                            borderRadius: '50%',
-                            backgroundColor: baseColors.tertiary,
-                            cursor: 'pointer',
-                        }}
-                        onClick={() => handlePlayAudio(false)}
-                    >
-                        <FontAwesomeIcon
-                            icon={faPause}
-                            color={BaseColors.WHITE}
-                            fontSize={14}
-                        />
-                    </Box>
-                )}
-                <Divider
-                    className="timeline"
-                    sx={{
-                        borderColor: BaseColors.GREY4,
-                        flex: 1,
-                        display: 'flex',
-                        alignItems: 'center',
-                    }}
+                <audio ref={ref} preload="metadata"></audio>
+                <AudioControls
+                    isPlayAudio={isPlayAudio}
+                    handlePlayAudio={handlePlayAudio}
                 />
+
+                <Box flex={1} position="relative">
+                    <Divider
+                        className="timeline"
+                        sx={{
+                            borderColor: BaseColors.GREY4,
+                            flex: 1,
+                            display: 'flex',
+                            alignItems: 'center',
+                        }}
+                    />
+                    <Box
+                        className="timeline-indicator"
+                        sx={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '0%',
+                            border: `1px solid ${BaseColors.RED}`,
+                            height: 50,
+                            transform: 'translateY(-50%)',
+                            visibility: 'hidden',
+                        }}
+                    ></Box>
+                </Box>
                 <Box display="flex">
                     <Typography variant="p3" color="secondary">
                         {(!!currentTime &&
