@@ -57,7 +57,7 @@ const PostDetailsModal = () => {
     const { mutate: removeLikeByPost } = useLikeDeletion();
     const { mutate: createComment } = useCommentCreation();
     const { mutate: deleteComment } = useCommentDeletion();
-    const audioRef = useRef('');
+    const audioRef = useRef<HTMLAudioElement | null>(null);
     const { isPlayAudio, handlePlayAudio, currentTime, duration } = useAudio(
         post?.audio || '',
         audioRef
@@ -167,6 +167,7 @@ const PostDetailsModal = () => {
                     {post?.audio ? (
                         <AudioPlayer
                             ref={audioRef}
+                            audioSrc={post?.audio || ''}
                             handlePlayAudio={handlePlayAudio}
                             currentTime={currentTime}
                             duration={duration}

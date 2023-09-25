@@ -4,7 +4,7 @@ import Drawer from '@components/drawer/Drawer';
 import Navigation from '@components/navigation/Navigation';
 import { Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './HomeScreen.module.css';
 import useLikeCreation from './hooks/useLikeCreation';
@@ -29,7 +29,7 @@ const HomePage = () => {
         useLikeDeletion();
     const { data: meData } = useMyAccount();
     const { mutate: createPost } = usePostCreation();
-    const { fields, onChange, onReset } = useForm({ text: '' });
+    const { fields, onReset, isEmptyValue } = useForm({ text: '' });
     const [recording, setRecording] = useState(false);
     const [permission, setPermission] = useState(false);
     const [stream, setStream] = useState<null | any>(null);

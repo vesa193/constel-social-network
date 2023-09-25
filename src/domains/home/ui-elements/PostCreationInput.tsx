@@ -16,8 +16,7 @@ const PostCreationInput = () => {
                 autoComplete="off"
                 onChange={onChange}
             />
-            {fields?.text?.length >= 0 ||
-            fields?.text?.length <= configApp.MAX_POST_CHARACTERS ? (
+            {fields?.text?.length > 0 ? (
                 <Typography variant="p3" color="secondary">
                     {fields?.text?.length}/{configApp.MAX_POST_CHARACTERS}
                 </Typography>

@@ -9,7 +9,6 @@ const useAudio = (audioSrc: string, audioRef: any) => {
 
     useEffect(() => {
         if (audioRef?.current) {
-            console.log('audioRef?.current', audioRef?.current);
             audioRef.current.src = audioSrc;
         }
     }, []);

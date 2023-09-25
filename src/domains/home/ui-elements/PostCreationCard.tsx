@@ -46,8 +46,6 @@ const PostCreationCard = ({
     );
     const [isStartRecording, setIsStartRecording] = useState<boolean>(false);
 
-    console.log('AUDIO SRC ---', audioSrc);
-
     return (
         <Box
             className={styles.postCreationCard}
@@ -139,6 +137,7 @@ const PostCreationCard = ({
                 {audioSrc ? (
                     <AudioRecorder
                         ref={audioRef}
+                        audioSrc={audioSrc}
                         isPlayAudio={isPlayAudio}
                         currentTime={currentTime}
                         duration={duration}

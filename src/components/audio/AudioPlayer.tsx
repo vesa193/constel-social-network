@@ -1,11 +1,11 @@
-import useAudio from '@/hooks/useAudio';
 import { BaseColors, baseColors } from '@/themes/colors';
 import { formatTime } from '@/utils/utils';
 import { Box, Divider, Typography } from '@mui/material';
-import { forwardRef, useEffect } from 'react';
+import { forwardRef, memo, useEffect } from 'react';
 import AudioControls from './AudioControls';
 
 type AudioPlayerProps = {
+    audioSrc?: string;
     audioRef?: any;
     isPlayAudio: boolean;
     currentTime: number;
@@ -23,12 +23,11 @@ const AudioPlayer = forwardRef<Ref, AudioPlayerProps>(
             duration,
             handlePlayAudio,
             audioRef: audioReference,
+            audioSrc,
         },
         ref
     ) => {
         const audioRef = ref;
-
-        console.log('audioReference', audioReference, duration, currentTime);
 
         const updateTimelineIndicator = () => {
             // Calculate the percentage of progress
@@ -68,7 +67,7 @@ const AudioPlayer = forwardRef<Ref, AudioPlayerProps>(
                     gap: '10px',
                 }}
             >
-                <audio ref={ref} preload="metadata"></audio>
+                <audio ref={ref} src={audioSrc} preload="auto"></audio>
                 <AudioControls
                     isPlayAudio={isPlayAudio}
                     handlePlayAudio={handlePlayAudio}
@@ -120,4 +119,4 @@ const AudioPlayer = forwardRef<Ref, AudioPlayerProps>(
 );
 
 AudioPlayer.displayName = 'AudioPlayer';
-export default AudioPlayer;
+export default memo(AudioPlayer);
